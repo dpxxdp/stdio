@@ -88,6 +88,10 @@ var UserSchema = new Schema({
 	},
 	resetPasswordExpires: {
 		type: Date
+	},
+	kismet: {
+		type: Number,
+		default: 0
 	}
 });
 
@@ -133,12 +137,28 @@ UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
 	}, function(err, user) {
 		if (!err) {
 			if (!user) {
-				callback(possibleUsername);
+				callback(null, possibleUsername);
 			} else {
 				return _this.findUniqueUsername(username, (suffix || 0) + 1, callback);
 			}
 		} else {
-			callback(null);
+			callback(err);
+		}
+	});
+};
+
+UserSchema.methods.giveKismetTo = function(username, amount, callback) {
+	var _this = this;
+	_this.findOne({
+		username : username
+	}, function(err, user) {
+		if (err) { return callback(err); }
+		if (user) {
+			user.kismet++;
+			_this.kismet--;
+			//call wallet API to send tokens, sign with token
+		} else {
+			callback('user does not exist');
 		}
 	});
 };

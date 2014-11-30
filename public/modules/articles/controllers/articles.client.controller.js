@@ -45,6 +45,30 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 		};
 
+		$scope.kismet = function() {
+			var article = $scope.article;
+
+			article.kismet += 1;
+
+			article.$update(function() {
+				$location.path('articles/' + article._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		$scope.unkismet = function() {
+			var article = $scope.article;
+
+			article.kismet -= 1;
+
+			article.$update(function() {
+				$location.path('articles/' + article._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
 		$scope.find = function() {
 			$scope.articles = Articles.query();
 		};
