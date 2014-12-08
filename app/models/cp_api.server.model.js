@@ -37,17 +37,19 @@ exports.setup_election = function(source, election, options, privkey, callback) 
 	var issuance = '';
 	var dividend_asset = '';
 
-	for (var i =0; i < election.proposals.length; i++) {
-		this.issue(source, election.proposals[i], quantity, divisible, description, options, privkey, function(err, data) {
-			if(err) { return callback(err); }
-			dividend_asset = data.asset;
-		});
 
-		this.dividend(source, 'KSMT', dividend_asset, quantity_per_unit, options, privkey, function(err, data) {
-			if(err) { return callback(err); }
-			callback(null, data);
-		});
-	}
+	//we have to set up a currency for each proposal
+	//for (var i =0; i < election.proposals.length; i++) {
+	//	this.issue(source, election.proposals[i], quantity, divisible, description, options, privkey, function(err, data) {
+	//		if(err) { return callback(err); }
+	//		dividend_asset = data.asset;
+	//	});
+//
+	//	this.dividend(source, 'KSMT', dividend_asset, quantity_per_unit, options, privkey, function(err, data) {
+	//		if(err) { return callback(err); }
+	//		callback(null, data);
+	//	});
+	//}
 };
 
 exports.read_election = function(ballotbox, callback) {
