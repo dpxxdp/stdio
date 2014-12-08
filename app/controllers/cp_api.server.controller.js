@@ -45,7 +45,6 @@ exports.vote = function(req, res) {
 
 exports.schedule_vote = function(req, res) {
 	
-
 	var issuance = 
 
 

@@ -2,92 +2,17 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var wallet = require('./wallet.server.model.js');
+var crypto = require('crypto');
+var Proposal = mongoose.model('Proposal');
 
-
-var BallotBoxSchema = new Schema({
-	//hash will be SHA128(ballotbox.yes+ballotbox.no+ballotbox.protest)
-	hash: {
-		type: String,
-		default: '',
-		trim: true,
-		required: 'proposal hash cannot be blank',
-	},
-	yes: {
-		type: String,
-		default: '',
-		trim: true,
-		required: 'ballotbox yes address cannot be blank',
-	},
-	no: {
-		type: String,
-		default: '',
-		trim: true,
-		required: 'ballotbox no address cannot be blank',
-	},
-	protest: {
-		type: String,
-		default: '',
-		trim: true,
-		required: 'protest address cannot be blank',
-	},
-});
-
-BallotBoxSchema.statics.create = function(callback) {
-
-	this.yes = generate_burn_address();
-	this.no = generate_burn_address();
-	this.protest = generate_burn_address();
-
-	this.save(callback);
-};
-
-mongoose.model('BallotBox', BallotBoxSchema);
-
-var ProposalSchema= new Schema({
-	//hash will be SHA128(proposal.title+proposal.description+proposal.address_hash)
-	hash: {
-		type: String,
-		default: '',
-		trim: true,
-		required: 'proposal hash cannot be blank',
-	},
-	title: {
-		type: String,
-		default: '',
-		trim: true,
-		required: 'proposal title cannot be blank',
-	},
-	description: {
-		type: String,
-		default: '',
-		trim: true,
-		required: 'proposal description cannot be blank',
-	},
-	sponsors: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'User',
-	},],
-	signatories: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'User'
-	},],
-});
-
-mongoose.model('Proposal', ProposalSchema);
-
-var ElectionHeaderSchema = new Schema({
-	//hash will be SHA128(iterate_and_append(election.proposal.hash)+election.header.previous+election.header.created)
+var ElectionSchema = new Schema({
+	//hash will be SHA1(election.header.previous+iterate_and_append(election.proposal.hash)+election.header.created)
 	hash: {
 		type: String,
 		default: '',
 		trim: true,
 		required: 'electionheader hash cannot be blank'
-	},
-	title: {
-		type: String,
-		default: '',
-		trim: true,
-		required: 'electionheader title cannot be blank',
 	},
 	created: {
 		type: Date,
@@ -98,26 +23,34 @@ var ElectionHeaderSchema = new Schema({
 		default: '',
 		required: 'electionheader previous cannot be blank',
 	},
-});
-
-ElectionHeaderSchema.statics.create = function() {
-
-};
-
-mongoose.model('ElectionHeader', ElectionHeaderSchema);
-
-
-var ElectionSchema = new Schema({
-	header: {
-		type: Schema.ObjectId,
-		ref: 'ElectionHeader',
-	},
 	proposals: [{type: mongoose.Schema.Types.ObjectId, ref: 'Proposal'}]
 });
 
-ElectionSchema.statics.create = function() {
+ElectionSchema.statics.create = function(callback) {
+	this.save(callback);
+};
 
+ElectionSchema.statics.add = function(title, description, sponsors, callback) {
+	Proposal.create(title, description, sponsors, function(err, model) {
+		if(err) { return callback(err); }
+
+		this.proposals.push(model);
+	});
+
+	this.save(callback);
+};
+
+ElectionSchema.statics.seal = function(callback) {
+
+	var sha = crypto.createHash('sha1');
+	sha.write(this.previous);
+	for (var i = 0; i < this.proposals.length - 1; i++) {
+		sha.write(this.proposals.hash);
+	}
+	sha.write(this.created);
+	this.hash = sha.read();
+
+	this.save(callback);
 };
 
 mongoose.model('Election', ElectionSchema);
-

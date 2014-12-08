@@ -5,39 +5,50 @@ var errorHandler = require('./errors.server.controller');
 var _ = require('lodash');
 var mongoose = require('mongoose');
 var passport = require('passport');
-var User = mongoose.model('Election');
+var Election = mongoose.model('Election');
 
 exports.create = function(req, res) {
 	// For security measurement we remove the roles from the req.body object
 	delete req.body.roles;
 
-	// Init Variables
-	var election = new Election();
-
 	
-
-
-	// Then save the user 
-	user.save(function(err) {
-		if (err) {
+	Election.create(function(err, model) {
+		if(err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			// Remove sensitive data before login
-			user.password = undefined;
-			user.salt = undefined;
-
-			req.login(user, function(err) {
-				if (err) {
-					res.status(400).send(err);
-				} else {
-					res.json(user);
-				}
-			});
+			res.json(model);
 		}
 	});
+};
 
+exports.add = function(req, res) {
+	var election = req.election;
+	election = _.extend(election, req.body);
 
+	election.add(req.body.title, req.body.description, req.user, function(err, model) {
+		if(err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(election);
+		}
+	});
+};
 
+exports.seal = function(req, res) {
+	var election = req.election;
+	election = _.extend(election, req.body);
+
+	election.seal(function(err, model) {
+		if(err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(model);
+		}
+	});
 };
