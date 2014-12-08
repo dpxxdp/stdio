@@ -1,7 +1,11 @@
 'use strict';
 
+var mongoose = require('mongoose');
 var settings = require('../../config/counterparty');
 var https = require('https');
+var Election = mongoose.model('Election');
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -13,18 +17,55 @@ exports.kismet = function(source, dest, privkey, callback) {
 	var currency = 'KSMT';
 	this.send(source, dest, amt, currency, privkey, function(err, data) {
 		if(err) { return callback(err); }
+		callback(null, data);
 	});
 };
 
-exports.vote = function(source, dest, privkey, amt, currency) {
+exports.vote = function(source, dest, amt, dividend_asset, privkey, callback) {
 
+	this.send(source, dest, amt, dividend_asset, privkey, function(err, data) {
+		if(err) { return callback(err); }
+		callback(null, data);
+	});
 };
 
-exports.create_vote = function(source, dest, privkey, callback) {
-	var amt = 1;
-	var currency = ;
-	this.send(source, dest, amt, currency, privkey, function(err, data) {
+exports.setup_election = function(source, election, options, privkey, callback) {
+	var quantity = '1000000';
+	var divisible = 'false';
+	var description = election._id;
+	var quantity_per_unit = 1;
+	var issuance = '';
+	var dividend_asset = '';
+
+	for (var i =0; i < election.proposals.length; i++) {
+		this.issue(source, election.proposals[i], quantity, divisible, description, options, privkey, function(err, data) {
+			if(err) { return callback(err); }
+			dividend_asset = data.asset;
+		});
+
+		this.dividend(source, 'KSMT', dividend_asset, quantity_per_unit, options, privkey, function(err, data) {
+			if(err) { return callback(err); }
+			callback(null, data);
+		});
+	}
+};
+
+exports.read_election = function(ballotbox, callback) {
+
+	var results = { 'yes': '', 'no':'', 'protest':'' };
+
+	this.balance(ballotbox.yes, function(err, data) {
 		if(err) { return callback(err); }
+		results.yes = data.balance;
+		this.balance(ballotbox.no, function(err, data) {
+			if(err) { return callback(err); }
+			results.no = data.balance;
+			this.balance(ballotbox.protest, function(err,data){
+				if(err) { return callback(err); }
+				results.protest = data.balance;
+				callback(null, results);
+			});
+		});
 	});
 };
 
