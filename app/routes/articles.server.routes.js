@@ -15,8 +15,9 @@ module.exports = function(app) {
 	app.route('/articles/:articleId')
 		.get(articles.read)
 		.put(users.requiresLogin, articles.hasAuthorization, articles.update)
-		.delete(users.requiresLogin, articles.hasAuthorization, articles.delete);
-
+		.delete(users.requiresLogin, articles.hasAuthorization, articles.delete)
+		.post(users.requiresLogin, articles.kismet);
+		
 //	app.route('/articles/:articleId/kismet')
 //		.put(users.requiresLogin, articles.kismet);
 

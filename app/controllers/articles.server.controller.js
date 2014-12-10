@@ -52,21 +52,21 @@ exports.update = function(req, res) {
 	});
 };
 
-//exports.kismet = function(req, res) {
-//	var article = req.article;
-//
-//	article = _.extend(article, req.body);
-//
-//	article.save(function(err) {
-//		if (err) {
-//			return res.status(400).send({
-//				message: errorHandler.getErrorMessage(err)
-//			});
-//		} else {
-//			res.json(article);
-//		}
-//	});
-//};
+exports.kismet = function(req, res) {
+	var article = req.article;
+
+	article = _.extend(article, req.body);
+
+	article.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(article);
+		}
+	});
+};
 
 /**
  * Delete an article

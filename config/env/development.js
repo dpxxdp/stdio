@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	db: 'mongodb://localhost/mean-dev',
+	db: 'mongodb://192.168.1.4',
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'dev',
@@ -12,7 +12,7 @@ module.exports = {
 		}
 	},
 	app: {
-		title: 'MEAN.JS - Development Environment'
+		title: 'stdio - Development Environment'
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',
