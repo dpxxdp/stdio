@@ -4,13 +4,13 @@
  * Module dependencies.
  */
 var users = require('../../app/controllers/users.server.controller');
-var articles = require('../../app/controllers/election.server.articles');
-var elections = require('../../app/controllers/election.server.controller');
+var articles = require('../../app/controllers/articles.server.controller');
+var election = require('../../app/controllers/election.server.controller');
 
 module.exports = function(app) {
 	// Article Routes
 	app.route('/elections')
-		.get(elections.list)
+		.get(election.list)
 		.post(users.requiresLogin, articles.create);
 
 	app.route('/articles/:articleId')

@@ -1,6 +1,6 @@
 'use strict';
 
-var cp_api = require('./models/cp_api.server.model.js');
+var cp_api = require('../models/cp_api.server.model.js');
 var errorHandler = require('./errors.server.controller');
 var _ = require('lodash');
 var mongoose = require('mongoose');
@@ -49,6 +49,18 @@ exports.seal = function(req, res) {
 			});
 		} else {
 			res.json(model);
+		}
+	});
+};
+
+exports.list = function(req, res) {
+	Election.find().sort('-created').populate('user', 'displayName').exec(function(err, elections) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(elections);
 		}
 	});
 };
