@@ -53,6 +53,7 @@ exports.update = function(req, res) {
 };
 
 exports.kismet = function(req, res) {
+<<<<<<< HEAD
 	var article = req.article;
 
 	article = _.extend(article, req.body);
@@ -66,6 +67,28 @@ exports.kismet = function(req, res) {
 			res.json(article);
 		}
 	});
+=======
+	var json_rpc_req = req.body;
+	var method = json_rpc_req.method;
+	var params = json_rpc_req.params;
+
+	switch(method) {
+	case 'SEND':
+		Article.findOneAndUpdate(
+			{id: req.article.id},
+			{$inc: {'articles.kismet': params.amt}},
+			{upsert: true},
+			function(err, article) {
+				if(err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }
+				else {
+					res.json(article);
+				}
+			});
+		break;
+	default:
+		break;
+	}
+>>>>>>> 353c946a6d8295b48a92773bd3ce979fa62d0c53
 };
 
 /**

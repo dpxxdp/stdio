@@ -3,6 +3,7 @@
 //Articles service used for communicating with the articles REST endpoints
 angular.module('articles').factory('Articles', ['$resource',
 	function($resource) {
+<<<<<<< HEAD
 		return $resource('articles/:articleId',
 		{
 			articleId: '@_id'
@@ -26,5 +27,11 @@ angular.module('articles').factory('Articles', ['$resource',
 				
 		}
 		);
+=======
+		return $resource('articles/:articleId', { articleId: '@_id'}, {
+			update: { method: 'PUT' },
+			kismet: { method: 'PUT' },
+		});
+>>>>>>> 353c946a6d8295b48a92773bd3ce979fa62d0c53
 	}
 ]);
