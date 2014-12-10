@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var wallet = require('./wallet.server.model.js');
 var crypto = require('crypto');
-var Proposal = mongoose.model('Proposal');
+//var Proposal = mongoose.model('Proposal');
 
 var ElectionSchema = new Schema({
 	//hash will be SHA1(election.previous+election.created+iterate_and_append(election.proposal.hash)+election.expired)
@@ -20,7 +20,7 @@ var ElectionSchema = new Schema({
 	},
 	expired: {
 		type: Date,
-		default: Date.now+4000000
+		default: Date.now,
 	},
 	previous: {
 		type: String,
@@ -34,15 +34,15 @@ ElectionSchema.statics.create = function(callback) {
 	this.save(callback);
 };
 
-ElectionSchema.statics.add = function(title, description, sponsors, callback) {
-	Proposal.create(title, description, sponsors, function(err, model) {
-		if(err) { return callback(err); }
-
-		this.proposals.push(model);
-	});
-
-	this.save(callback);
-};
+//ElectionSchema.statics.add = function(title, description, sponsors, callback) {
+//	Proposal.create(title, description, sponsors, function(err, model) {
+//		if(err) { return callback(err); }
+//
+//		this.proposals.push(model);
+//	});
+//
+//	this.save(callback);
+//};
 
 ElectionSchema.statics.seal = function(callback) {
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var cp_api = require('./models/cp_api.server.model.js');
+var cp_api = require('../models/cp_api.server.model.js');
 var errorHandler = require('./errors.server.controller');
 
 

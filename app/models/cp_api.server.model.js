@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var settings = require('../../config/counterparty');
 var https = require('https');
+//var Election = mongoose.model('Election');
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var crypto = require('crypto');
-var BallotBox = mongoose.model('BallotBox');
+//var BallotBox = mongoose.model('BallotBox');
 
 var ProposalSchema= new Schema({
 	//hash will be SHA1(proposal.title+proposal.description+proposal.ballotbox.hash)
@@ -39,20 +39,20 @@ var ProposalSchema= new Schema({
 	}
 });
 
-ProposalSchema.statics.create = function(title, description, sponsors, callback) {
-	this.title = title;
-	this.description = description;
-	this.sponsors = sponsors;
-
-	BallotBox.create(title, function(err, model){
-		if(err) { return callback(err); }
-
-		var sha = crypto.createHash('sha1');
-		sha.write(title+description+model.hash);
-		this.hash = sha.read();
-	});
-
-	this.save(callback);
-};
+//ProposalSchema.statics.create = function(title, description, sponsors, callback) {
+//	this.title = title;
+//	this.description = description;
+//	this.sponsors = sponsors;
+//
+//	BallotBox.create(title, function(err, model){
+//		if(err) { return callback(err); }
+//
+//		var sha = crypto.createHash('sha1');
+//		sha.write(title+description+model.hash);
+//		this.hash = sha.read();
+//	});
+//
+//	this.save(callback);
+//};
 
 mongoose.model('Proposal', ProposalSchema);
