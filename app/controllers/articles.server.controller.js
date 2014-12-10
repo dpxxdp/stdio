@@ -53,21 +53,6 @@ exports.update = function(req, res) {
 };
 
 exports.kismet = function(req, res) {
-<<<<<<< HEAD
-	var article = req.article;
-
-	article = _.extend(article, req.body);
-
-	article.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.json(article);
-		}
-	});
-=======
 	var json_rpc_req = req.body;
 	var method = json_rpc_req.method;
 	var params = json_rpc_req.params;
@@ -88,7 +73,6 @@ exports.kismet = function(req, res) {
 	default:
 		break;
 	}
->>>>>>> 353c946a6d8295b48a92773bd3ce979fa62d0c53
 };
 
 /**

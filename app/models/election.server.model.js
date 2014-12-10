@@ -60,7 +60,7 @@ ElectionSchema.statics.seal = function(callback) {
 
 ElectionSchema.statics.now = function(callback) {
 	var now = Date.now();
-	var election = mongoose.find()
+	var election = mongoose.find();
 	//find with mongoose in elections. create new one if now>this.expired
 	if(now>election.expired) {
 		this.create(function(err, model) {
@@ -73,3 +73,5 @@ ElectionSchema.statics.now = function(callback) {
 };
 
 mongoose.model('Election', ElectionSchema);
+
+

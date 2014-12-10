@@ -29,10 +29,6 @@ var ArticleSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'User'
 	},
-	kismet: {
-		type: Number,
-		default: 0,
-	},
 	children: {
 		type: Schema.ObjectId,
 		ref: 'Article',

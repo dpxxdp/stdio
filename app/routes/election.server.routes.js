@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var users = require('../../app/controllers/users.server.controller');
+var articles = require('../../app/controllers/election.server.articles');
 var elections = require('../../app/controllers/election.server.controller');
 
 module.exports = function(app) {
