@@ -16,9 +16,7 @@ module.exports = function(app) {
 	app.route('/articles/:articleId')
 		.get(articles.read)
 		.put(users.requiresLogin, articles.hasAuthorization, articles.update)
-		.delete(users.requiresLogin, articles.hasAuthorization, articles.delete);
-
-	app.route('/articles/:articleId/k')
+		.delete(users.requiresLogin, articles.hasAuthorization, articles.delete)
 		.post(users.requiresLogin, cp_api.save_to_blockchain, articles.kismet);
 
 	// Finish by binding the article middleware

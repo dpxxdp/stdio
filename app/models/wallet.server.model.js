@@ -22,6 +22,7 @@ exports.create_vote_address = function(seed, injection, callback) {
 	callback(null, address);
 };
 
+
 exports.create_address = function(seed) {
 	var hash = bitcoin.crypto.sha256(seed);
     var d = bigInt.fromBuffer(hash);

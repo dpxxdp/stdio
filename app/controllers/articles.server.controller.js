@@ -73,27 +73,6 @@ exports.kismet = function(req, res) {
 	default:
 		break;
 	}
-
-
-
-
-		//GET ARTICLE FROM DB
-		//UPDATE article.kismet += params.amt
-		//USE params.auth to help here 
-		break;
-	default:
-		break;
-	}
-
-	article.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.json(article);
-		}
-	});
 };
 
 /**

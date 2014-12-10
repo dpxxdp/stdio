@@ -75,6 +75,7 @@ exports.setup_election = function(req, res) {
 	var privkey = req.user.password;
 	var dividend_asset = req.election.proposal[index].hash;
 	var amt = req.body.amt;
+	var options = req.election.options;
 
 	cp_api.setup_election(source, dividend_asset, options, privkey, function(err, data){
 		if (err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }
