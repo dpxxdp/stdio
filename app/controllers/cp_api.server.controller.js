@@ -5,11 +5,14 @@ var errorHandler = require('./errors.server.controller');
 
 
 //TODO: Insecure password passing
-exports.kismet = function(req, res) {
+exports.kismet = function(req, res, next) {
 
 	cp_api.kismet(req.user.wallet.address, req.article.author, req.user.wallet.privKey, function(err,data) {
 		if (err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }
-		res.json(data);
+		if(data.error) { return res.status(400).send({ message: errorHandler.getErrorMessage(data.error) }); }
+
+		req.kismet.result = data.result;
+		next();
 	});
 
 };
@@ -77,7 +80,6 @@ exports.setup_election = function(req, res) {
 		if (err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }
 		res.json(data);
 	});
-
 };
 
 
