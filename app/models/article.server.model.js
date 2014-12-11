@@ -36,6 +36,11 @@ var ArticleSchema = new Schema({
 	edits: {
 		type: Schema.ObjectId,
 		ref: 'Article',
+	},
+	address: {
+		type: String,
+		default: '',
+		trim: true,
 	}
 });
 

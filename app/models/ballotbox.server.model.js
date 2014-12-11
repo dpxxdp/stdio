@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var wallet = require('./wallet.server.model.js');
+var Wallet = mongoose.model('Wallet');
 var crypto = require('crypto');
 
 
@@ -36,15 +36,15 @@ var BallotBoxSchema = new Schema({
 
 BallotBoxSchema.statics.create = function(proposal_title, callback) {
 
-	wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
+	Wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
 		this.yes = data;
 	});
 
-	wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
+	Wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
 		this.no = data;
 	});
 
-	wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
+	Wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
 		this.protest = data;
 	});
 

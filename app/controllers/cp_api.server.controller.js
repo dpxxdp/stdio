@@ -5,16 +5,18 @@ var errorHandler = require('./errors.server.controller');
 
 
 //TODO: Insecure password passing
-exports.kismet = function(req, res, next) {
+exports.send_ksmt = function(req, res, next) {
+	var source = req.user.wallet.address;
+	var dest = req.article.address;
+	var privKey = req.user.wallet.privKey;
 
-	cp_api.kismet(req.user.wallet.address, req.article.author, req.user.wallet.privKey, function(err,data) {
+	cp_api.kismet(source, dest, privKey, function(err,data) {
 		if (err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }
 		if(data.error) { return res.status(400).send({ message: errorHandler.getErrorMessage(data.error) }); }
 
-		req.kismet.result = data.result;
+		req.blockchain.result = data.result;
 		next();
 	});
-
 };
 
 //TODO: Insecure password passing
