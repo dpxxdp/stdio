@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Wallet = mongoose.model('Wallet');
+//var Wallet = mongoose.model('Wallet');
 var crypto = require('crypto');
 
 
