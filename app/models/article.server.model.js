@@ -29,10 +29,6 @@ var ArticleSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'User'
 	},
-	kismet: {
-		type: Number,
-		default: 0,
-	},
 	children: {
 		type: Schema.ObjectId,
 		ref: 'Article',
@@ -40,6 +36,11 @@ var ArticleSchema = new Schema({
 	edits: {
 		type: Schema.ObjectId,
 		ref: 'Article',
+	},
+	address: {
+		type: String,
+		default: '',
+		trim: true,
 	}
 });
 

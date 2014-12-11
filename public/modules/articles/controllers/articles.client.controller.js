@@ -45,13 +45,17 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 		};
 
-		$scope.kismet = function() {
-			var article = $scope.article;
+		$scope.kismet = function(article) {
+
+			if(!article)
+			{
+				var article = $scope.article;
+			}
 
 			article.kismet += 1;
 
-			article.$update(function() {
-				$location.path('articles/' + article._id);
+			article.$kismet(function() {
+				//$location.path('articles/' + article._id);
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
