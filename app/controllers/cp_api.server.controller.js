@@ -5,7 +5,7 @@ var errorHandler = require('./errors.server.controller');
 
 
 //TODO: Insecure password passing
-exports.send_ksmt = function(req, res, next) {
+exports.kismet = function(req, res, next) {
 	var source = req.user.wallet.address;
 	var dest = req.article.address;
 	var privKey = req.user.wallet.privKey;
