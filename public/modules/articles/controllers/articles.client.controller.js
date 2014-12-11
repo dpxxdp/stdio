@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-	function($scope, $stateParams, $location, Authentication, Articles) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles', 'Comments',
+	function($scope, $stateParams, $location, Authentication, Articles, Comments) {
 		$scope.authentication = Authentication;
 
 		$scope.create = function() {
@@ -17,6 +17,32 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
+		};
+
+		$scope.createComment = function(parentId) {
+			var article = new Articles({
+				//parent: this.parentId,
+				//title: $scope.parentId.toString(),
+				content: this.content
+			});
+			article.title = 'comment';
+			article.parent = $scope.article._id; //this.parentId;
+			article.$save(function(response) {
+				//$location.path('articles/' + response._id);
+
+				//$scope.title = '';
+				$scope.content = '';
+				$scope.comments.unshift(article); //display the new comment
+				$scope.showComment = !$scope.showComment;
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		//init the comment field to hidden on load
+		$scope.showComment = false;
+		$scope.showcomment = function(){
+			$scope.showComment = !$scope.showComment;
 		};
 
 		$scope.remove = function(article) {
@@ -46,14 +72,11 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 		};
 
 		$scope.kismet = function(article) {
-
 			if(!article)
 			{
-				var article = $scope.article;
+				article = $scope.article;
 			}
-
 			article.kismet += 1;
-
 			article.$kismet(function() {
 				//$location.path('articles/' + article._id);
 			}, function(errorResponse) {
@@ -81,6 +104,11 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			$scope.article = Articles.get({
 				articleId: $stateParams.articleId
 			});
+			$scope.comments = //['one','two','three'];
+			Comments.query({
+				parentId: $stateParams.articleId
+			});
 		};
+
 	}
 ]);

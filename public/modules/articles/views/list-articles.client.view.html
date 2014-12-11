@@ -9,6 +9,11 @@
 			<a ng-click="kismet(article)">
 				<i class="glyphicon glyphicon-chevron-left"></i>
 			</a>
+<!--
+			<a ng-click="remove(article)">
+				<i class="glyphicon glyphicon-trash"></i>
+			</a>
+-->
 			<small class="list-group-item-text">
 				Posted on
 				<span data-ng-bind="article.created | date:'mediumDate'"></span>
@@ -16,6 +21,10 @@
 				<span data-ng-bind="article.user.displayName"></span>
 
 			</small>
+<!--
+			<span data-ng-bind="article._id"></span> -
+			<span data-ng-bind="article.parent"></span>
+-->
 			<a data-ng-href="#!/articles/{{article._id}}">
 				<h4  class="list-group-item-heading" data-ng-bind="article.title"></h4>
 			</a>
