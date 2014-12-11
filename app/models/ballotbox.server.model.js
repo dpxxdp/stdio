@@ -36,21 +36,21 @@ var BallotBoxSchema = new Schema({
 
 BallotBoxSchema.statics.create = function(proposal_title, callback) {
 
-	Wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
-		this.yes = data;
-	});
-
-	Wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
-		this.no = data;
-	});
-
-	Wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
-		this.protest = data;
-	});
-
-	var sha = crypto.createHash('sha1');
-	sha.write(this.yes+this.no+this.protest);
-	this.hash = sha.read();
+	//Wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
+	//	this.yes = data;
+	//});
+//
+	//Wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
+	//	this.no = data;
+	//});
+//
+	//Wallet.create_vote_address(Date.now(), proposal_title, function(err, data) {
+	//	this.protest = data;
+	//});
+//
+	//var sha = crypto.createHash('sha1');
+	//sha.write(this.yes+this.no+this.protest);
+	//this.hash = sha.read();
 
 	this.save(callback);
 };
