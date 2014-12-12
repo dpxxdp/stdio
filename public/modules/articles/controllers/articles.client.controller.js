@@ -9,6 +9,9 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				title: this.title,
 				content: this.content
 			});
+
+			article.parent = 'top'; //by default the articles list only shows where parent = 'top'
+
 			article.$save(function(response) {
 				$location.path('articles/' + response._id);
 
