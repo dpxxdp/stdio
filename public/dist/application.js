@@ -48,6 +48,10 @@ ApplicationConfiguration.registerModule('articles');
 'use strict';
 
 // Use Applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('boardroom');
+'use strict';
+
+// Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('core');
 'use strict';
 
@@ -59,9 +63,9 @@ ApplicationConfiguration.registerModule('users');
 angular.module('articles').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Articles', 'articles', 'dropdown', '/articles(/create)?');
-		Menus.addSubMenuItem('topbar', 'articles', 'List Articles', 'articles');
-		Menus.addSubMenuItem('topbar', 'articles', 'New Article', 'articles/create');
+		Menus.addMenuItem('topbar', 'Posts', 'articles', 'dropdown', '/articles(/create)?');
+		Menus.addSubMenuItem('topbar', 'articles', 'All Posts', 'articles');
+		Menus.addSubMenuItem('topbar', 'articles', 'New Post', 'articles/create');
 	}
 ]);
 'use strict';
@@ -91,8 +95,8 @@ angular.module('articles').config(['$stateProvider',
 ]);
 'use strict';
 
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-	function($scope, $stateParams, $location, Authentication, Articles) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles', 'Comments',
+	function($scope, $stateParams, $location, Authentication, Articles, Comments) {
 		$scope.authentication = Authentication;
 
 		$scope.create = function() {
@@ -100,6 +104,9 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				title: this.title,
 				content: this.content
 			});
+
+			article.parent = 'top'; //by default the articles list only shows where parent = 'top'
+
 			article.$save(function(response) {
 				$location.path('articles/' + response._id);
 
@@ -108,6 +115,32 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
+		};
+
+		$scope.createComment = function(parentId) {
+			var article = new Articles({
+				//parent: this.parentId,
+				//title: $scope.parentId.toString(),
+				content: this.content
+			});
+			article.title = 'comment';
+			article.parent = $scope.article._id; //this.parentId;
+			article.$save(function(response) {
+				//$location.path('articles/' + response._id);
+
+				//$scope.title = '';
+				$scope.content = '';
+				$scope.comments.unshift(article); //display the new comment
+				$scope.showComment = !$scope.showComment;
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		//init the comment field to hidden on load
+		$scope.showComment = false;
+		$scope.showcomment = function(){
+			$scope.showComment = !$scope.showComment;
 		};
 
 		$scope.remove = function(article) {
@@ -136,6 +169,31 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 		};
 
+		$scope.kismet = function(article) {
+			if(!article)
+			{
+				article = $scope.article;
+			}
+			article.kismet += 1;
+			article.$kismet(function() {
+				//$location.path('articles/' + article._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		$scope.unkismet = function() {
+			var article = $scope.article;
+
+			article.kismet -= 1;
+
+			article.$update(function() {
+				$location.path('articles/' + article._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
 		$scope.find = function() {
 			$scope.articles = Articles.query();
 		};
@@ -144,21 +202,85 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			$scope.article = Articles.get({
 				articleId: $stateParams.articleId
 			});
+			$scope.comments = //['one','two','three'];
+			Comments.query({
+				parentId: $stateParams.articleId
+			});
 		};
+
+	}
+]);
+
+'use strict';
+
+//Articles service used for communicating with the articles REST endpoints
+angular.module('articles')
+	.factory('Articles', //the name of the resource Class
+	['$resource',
+	function($resource) {
+		return $resource('articles/:articleId',
+		{
+			articleId: '@_id',
+		},
+		{
+			update: {
+				method: 'PUT'
+				},
+			kismet: {
+				method: 'POST',
+				params: {
+					jsonrpc:'2.0',
+					method:'SEND',
+					params:{amt:1},
+					id:Date.now,
+				}
+			}
+		});
+	}
+]);
+
+
+//Comments service used for communicating with the articles REST endpoints
+angular.module('articles')
+	.factory('Comments', //the name of the resource Class
+	['$resource',
+	function($resource) {
+		return $resource('comments/:parentId',
+		{
+			parentId: '@parent',
+		});
+	}
+]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('boardroom').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Boardroom', 'boardroom', '/boardroom');
 	}
 ]);
 'use strict';
 
-//Articles service used for communicating with the articles REST endpoints
-angular.module('articles').factory('Articles', ['$resource',
-	function($resource) {
-		return $resource('articles/:articleId', {
-			articleId: '@_id'
-		}, {
-			update: {
-				method: 'PUT'
-			}
+// Setting up route
+angular.module('boardroom').config(['$stateProvider',
+	function($stateProvider) {
+		// boardroom state routing
+		$stateProvider.
+		state('boardroom', {
+			url: '/boardroom',
+			templateUrl: 'modules/boardroom/views/boardroom.client.view.html'
 		});
+	}
+]);
+'use strict';
+
+
+angular.module('boardroom').controller('BoardroomController', ['$scope', 'Authentication',
+	function($scope, Authentication) {
+		// This provides Authentication context.
+		$scope.authentication = Authentication;
 	}
 ]);
 'use strict';
