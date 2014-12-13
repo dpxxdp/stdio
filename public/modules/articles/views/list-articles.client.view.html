@@ -1,15 +1,51 @@
 <section data-ng-controller="ArticlesController" data-ng-init="find()">
 	<div class="page-header">
-		<h1>Articles</h1>
+		<h1>{{WelcomeToTheSpot}}</h1>
 	</div>
+
+<div class="container">
+
+	<a style="cursor:pointer" ng-click="switchCreateVisible()">
+		<i class="glyphicon glyphicon-align-justify"></i>
+	</a><-post something
+
+	<div class="col-md-12" >
+		<form ng-show="createVisible" name="articleForm" class="form-horizontal" data-ng-submit="create()" novalidate>
+			<fieldset>
+				<div class="form-group"> <!--ng-class="{ 'has-error': articleForm.title.$dirty && articleForm.title.$invalid }"-->
+					<label class="control-label" for="title">Title</label>
+					<div class="controls">
+						<input name="title" type="text" data-ng-model="title" id="title" class="form-control" placeholder="Title" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="content">Post</label>
+					<div class="controls">
+						<textarea placeholder="{{WelcomeToTheSpot}}" name="content" data-ng-model="content" id="content" class="form-control" cols="30" rows="5"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<input type="submit" value="Post it!" class="btn btn-default">
+				</div>
+				<div data-ng-show="error" class="text-danger">
+					<strong data-ng-bind="error"></strong>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+
+<div class="container">
 	<div class="list-group">
 		<span data-ng-repeat="article in articles" class="list-group-item">
 
+<!-- hiding kismet for now
 			<span data-ng-bind="article.kismet"></span>
 			<a ng-click="kismet(article)">
 				<i class="glyphicon glyphicon-chevron-left"></i>
 			</a>
-<!--
+
+--and hiding delete for dev use lol
 			<a ng-click="remove(article)">
 				<i class="glyphicon glyphicon-trash"></i>
 			</a>
@@ -34,4 +70,5 @@
 	<div class="alert alert-warning text-center" data-ng-if="articles.$resolved && !articles.length">
 		No articles yet, why don't you <a href="/#!/articles/create">create one</a>?
 	</div>
+</div>
 </section>

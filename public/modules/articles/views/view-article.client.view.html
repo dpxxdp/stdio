@@ -2,6 +2,7 @@
 	<div class="page-header">
 		<h1 data-ng-bind="article.title"></h1>
 	</div>
+
 	<div class="pull-right" data-ng-show="authentication.user._id == article.user._id">
 		<a class="btn btn-primary" href="/#!/articles/{{article._id}}/edit">
 			<i class="glyphicon glyphicon-edit"></i>
@@ -10,6 +11,8 @@
 			<i class="glyphicon glyphicon-trash"></i>
 		</a>
 	</div>
+
+<!-- hiding kismet for now
 	<div class="pull-right">
 		<a class="btn btn-primary" ng-click="kismet()">
 			<i class="glyphicon glyphicon-chevron-up"></i>
@@ -18,13 +21,16 @@
 			<i class="glyphicon glyphicon-chevron-down"></i>
 		</a>
 	</div>
+-->
 	<small>
 		<em class="text-muted">
 			<span data-ng-bind="article.kismet"></span>
+<!--
 		<a ng-click="kismet()">
 			<i class="glyphicon glyphicon-chevron-left"></i>
 		</a>
-		ismet
+-->
+		what's kismet?
 	</em>
 
 	</small>
@@ -36,18 +42,18 @@
 			<span data-ng-bind="article.created | date:'mediumDate'"></span>
 		</em>
 	</small>
-	<p class="lead" data-ng-bind="article.content"></p>
+	<p style="background-color:lightgrey;padding:5px" class="lead" data-ng-bind="article.content"></p>
 
-	<a class="btn btn-primary" ng-click="showcomment()">
+	<a ng-click="showcomment()">
 		<i class="glyphicon glyphicon-align-justify"></i>
-	</a>
+	</a> <-click to add a comment!
 
   <form ng-show="showComment">
-		<textarea name="comment" data-ng-model="content" class="form-control" cols="10" rows="5" placeholder="Write something! {{article._id}}"></textarea>
+		<textarea name="comment" data-ng-model="content" class="form-control" cols="10" rows="5" placeholder="Write something!"></textarea>
   	<input type="submit" ng-click="createComment()" value="Save" />
 	</form>
 
-	comments:
+	<br><h2>comments:</h2>
 	<div ng-repeat="comment in comments">
 		<small>
 			<em class = "text-muted">
@@ -57,7 +63,7 @@
 				<span data-ng-bind="comment.created | date:'mediumDate'"></span>
 			</em>
 		</small>
-		<p data-ng-bind="comment.content"></p>
+		<p style="background-color:lightgrey;padding:5px" data-ng-bind="comment.content"></p>
 	</div>
 
 <!--

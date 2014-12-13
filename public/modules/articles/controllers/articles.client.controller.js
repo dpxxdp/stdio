@@ -4,6 +4,25 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 	function($scope, $stateParams, $location, Authentication, Articles, Comments) {
 		$scope.authentication = Authentication;
 
+		var welcomeToTheSpot = [
+			'Welcome to the Spot',
+			'Your spot is now hit',
+			'Cigarette spot, smoke em if you got em',
+			'You are now a spot',
+			'See spot play bongos',
+			'There is no smoking in the spot',
+			'Spotted leopards everywhere',
+			'For all your spot hitting needs',
+			'There once was a man from nantucket..'		
+		]
+
+		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
+
+		$scope.createVisible = false;
+		$scope.switchCreateVisible = function(){
+			$scope.createVisible = !$scope.createVisible;
+		};
+
 		$scope.create = function() {
 			var article = new Articles({
 				title: this.title,
@@ -11,12 +30,15 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 
 			article.parent = 'top'; //by default the articles list only shows where parent = 'top'
+			article.user = this.user;
 
 			article.$save(function(response) {
-				$location.path('articles/' + response._id);
+				//$location.path('articles/' + response._id);
 
 				$scope.title = '';
 				$scope.content = '';
+				$scope.articles.unshift(article); //push it to the display
+				$scope.createVisible = !$scope.createVisible;
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
