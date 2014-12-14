@@ -6,9 +6,9 @@ var errorHandler = require('./errors.server.controller');
 
 //TODO: Insecure password passing
 exports.kismet = function(req, res, next) {
-	var source = req.user.wallet.address;
+	var source = req.user.address;
 	var dest = req.article.address;
-	var privKey = req.user.wallet.privKey;
+	var privKey = req.user.privKey;
 
 	cp_api.kismet(source, dest, privKey, function(err,data) {
 		if (err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }

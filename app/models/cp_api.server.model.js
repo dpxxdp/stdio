@@ -13,8 +13,10 @@ var https = require('https');
 exports.kismet = function(source, dest, privkey, callback) {
 	var amt = 1;
 	var currency = 'KSMT';
+	console.log('cp_api.server.model: sending kismet to' + dest);
 	this.send(source, dest, amt, currency, privkey, function(err, data) {
 		if(err) { return callback(err); }
+		console.log('cp_api.server.model: sent kismet: ' + dest);
 		callback(null, data);
 	});
 };
@@ -75,12 +77,15 @@ exports.read_election = function(ballotbox, callback) {
 ///////////////////////////////////////////////////////////////////////////////
 
 exports.send = function(source, dest, amt, currency, privkey, callback) {
-
+	console.log('cp_api.server.model.send: sending kismet to' + dest);
 	this.create_send(source, dest, amt, currency, function(err, unsigned_tx_hex) {
+		console.log('cp_api.server.model.send: ERROR: ' + err);
 		if(err) { return callback(err); }
+		console.log('cp_api.server.model.send: created tx:' + unsigned_tx_hex);
 
 		this.sign_and_broadcast(unsigned_tx_hex, privkey, function(err, data) {
 			if(err) { return callback(err); }
+			console.log('cp_api.server.model.send: returned:' + data);
 			callback(null, data);
 		});
 	});
@@ -123,10 +128,13 @@ exports.balance = function(address, callback) {
 //ABSTRACTION  LAYERS//////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-var sign_and_broadcast = function(unsigned_tx_hex, privkey, callback) {
+exports.sign_and_broadcast = function(unsigned_tx_hex, privkey, callback) {
+	console.log('cp_api.server.model.sign_and_broadcast: with privKey' + privkey);
 	this.sign_tx(unsigned_tx_hex, privkey, function(err, signed_tx_hex) {
 		if(err) { return callback(err); }
+		console.log('cp_api.server.model.sign_and_broadcast: signed tx:' + signed_tx_hex);
 		this.broadcast_tx(signed_tx_hex, function(err, data) {
+			console.log('cp_api.server.model.sign_and_broadcast: returned data' + data);
 			if(err) { return callback(err); }
 			callback(null, data);
 		});
@@ -137,7 +145,7 @@ var sign_and_broadcast = function(unsigned_tx_hex, privkey, callback) {
 //API CALLS////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-var sign_tx = function(unsigned_tx_hex, privkey, callback) {
+exports.sign_tx = function(unsigned_tx_hex, privkey, callback) {
 	var body = {
 		'method' : 'sign_tx',
 		'params' : {
@@ -148,14 +156,16 @@ var sign_tx = function(unsigned_tx_hex, privkey, callback) {
 		'id' : Date.now(),
 	};
 
+	console.log('cp_api.server.model.sign_tx: with body:' + JSON.stringify(body));
+
     this.https_client(body, function(err, signed_tx_hex){
 		if(err) { return callback(err); }
-		//console.log('data');
+		console.log('cp_api.server.model.sign_tx: signed:' + signed_tx_hex);
 		callback(null, signed_tx_hex);
     });
 };
 
-var broadcast_tx = function(signed_tx_hex, callback) {
+exports.broadcast_tx = function(signed_tx_hex, callback) {
 	var body = {
 		'method' : 'broadcast_tx',
 		'params' : {
@@ -171,7 +181,7 @@ var broadcast_tx = function(signed_tx_hex, callback) {
     });
 };
 
-var create_send = function(source, dest, amt, currency, callback) {
+exports.create_send = function(source, dest, amt, currency, callback) {
 
 	//console.log('create_send')
 	var body = {
@@ -187,13 +197,16 @@ var create_send = function(source, dest, amt, currency, callback) {
     };
 
     this.https_client(body, function(err, data){
-		if(err) { return callback(err); }
-		//console.log('data');
+		if(err) {
+			console.log('cp_api.server.model.create_send: https_client called back w/ ERROR: ' + err);
+			return callback(err);
+		}
+		console.log('cp_api.server.model.create_send: https_client called back w/ data: ' + data);
 		callback(null, data);
     });
 };
 
-var create_issuance = function(source, asset, quantity, divisible, description, options, callback) {
+exports.create_issuance = function(source, asset, quantity, divisible, description, options, callback) {
 	var body = {
 		'method' : 'broadcast_tx',
 		'params' : {
@@ -218,7 +231,7 @@ var create_issuance = function(source, asset, quantity, divisible, description, 
     });
 };
 
-var create_dividend = function(source, asset, dividend_asset, quantity_per_unit, options, callback) {
+exports.create_dividend = function(source, asset, dividend_asset, quantity_per_unit, options, callback) {
 	var body = {
 		'method' : 'broadcast_tx',
 		'params' : {
@@ -243,7 +256,7 @@ var create_dividend = function(source, asset, dividend_asset, quantity_per_unit,
 };
 
 
-var get_balances = function(address, callback) {
+exports.get_balances = function(address, callback) {
 	var body = {
 		'method' : 'broadcast_tx',
 		'params' : {
@@ -268,17 +281,17 @@ var get_balances = function(address, callback) {
 //HTTPS GATEWAY////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-var https_client = function(body, callback) {
-
-	var options = settings.requestOptions;
+exports.https_client = function(body, callback) {
 	
+	var options = settings.requestOptions;
+	console.log('cp_api.server.model.https_client: with options:' + JSON.stringify(options));
 	//send request
 	var secureRequest = https.request(options, function(response) {
-		console.log('https_client: request called back');
+		console.log('https_client: request called back with response' + response.statusCode);
 		
-		if(response.statusCode !== '200'){
-			//console.log('HEADERS: ' + JSON.stringify(response.headers));
-			return callback('https_client: response error: ' + JSON.stringify(response.statusCode));
+		if(response.statusCode != '200'){
+			console.log('cp_api.server.model.https_client: ' + JSON.stringify(response.headers));
+			return callback(JSON.stringify(response.statusCode));
 		}
 		
 		response.setEncoding('utf8');
@@ -292,8 +305,8 @@ var https_client = function(body, callback) {
 		response.on('end', function() {
 			var responseObj = JSON.parse(responseBuff);
 			if(responseObj.jsonrpc !== '2.0') {
-				console.log('https_client: JSON response unrecognized: ' + responseObj.jsonrpc);
-				return callback('https_client: JSON response unrecognized: ' + responseObj.jsonrpc);
+				console.log('cp_api.server.model.https_client: JSON response unrecognized: ' + responseObj.jsonrpc);
+				return callback(responseObj.jsonrpc);
 			}
 
 			callback(null, responseObj.result);
