@@ -13,6 +13,7 @@ var mongoose = require('mongoose'),
  */
 exports.create = function(req, res) {
 	var article = new Article(req.body);
+
 	article.user = req.user;
 
 	article.save(function(err) {
@@ -38,6 +39,9 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
 	var article = req.article;
+
+console.log('resetting parent');
+	article.parent = '';//article.id;
 
 	article = _.extend(article, req.body);
 
@@ -96,7 +100,22 @@ exports.delete = function(req, res) {
  * List of Articles
  */
 exports.list = function(req, res) {
-	Article.find().sort('-created').populate('user', 'displayName').exec(function(err, articles) {
+	Article.find({parent:'top'}).sort('-created').populate('user', 'displayName').exec(function(err, articles) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(articles);
+		}
+	});
+};
+
+exports.listComments = function(req, res) {
+//	console.log('list:');
+//	console.log(JSON.stringify(req.query));
+
+	Article.find({parent:req.param('parentId')}).sort('-created').populate('user', 'displayName').exec(function(err, articles) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -119,6 +138,14 @@ exports.articleByID = function(req, res, next, id) {
 	});
 };
 
+exports.articleByParent = function(req, res, next, id) {
+	Article.where('parent').equals(id).populate('user', 'displayName').exec(function(err, article) {
+		if (err) return next(err);
+		if (!article) return next(new Error('Failed to load article ' + id));
+		req.article = article;
+		next();
+	});
+};
 /**
  * Article authorization middleware
  */

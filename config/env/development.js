@@ -2,6 +2,7 @@
 
 module.exports = {
 	db: 'mongodb://localhost',
+	port: process.env.PORT || 8080,
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'dev',

@@ -33,6 +33,11 @@ var ArticleSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'Article',
 	},
+	parent: {
+		type: String,
+		default: '',
+		trim: true
+	},
 	edits: {
 		type: Schema.ObjectId,
 		ref: 'Article',
