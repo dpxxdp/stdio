@@ -12,12 +12,12 @@ angular.module('articles')
 		{
 			update: {
 				method: 'PUT'
-				},
+			},
 			kismet: {
 				method: 'POST',
 				params: {
 					jsonrpc:'2.0',
-					method:'SEND',
+					method:'send_kismet',
 					params:{amt:1},
 					id:Date.now,
 				}

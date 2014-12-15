@@ -14,7 +14,7 @@ exports.send_kismet = function(req, res, next) {
 	var currency = 'KSMT';
 	//console.log('cp_api.server.controller: sending kismet to: ' + dest);
 
-	cp_api.create_send(source, dest, amt, currency, function(err, unsigned_tx_hex, api) {
+	cp_api.create_send(source, dest, amt, currency, function(err, unsigned_tx_hex) {
 		if(err) {
 			console.log('cp_api.server.controller.kismet: ERROR: ' + err);
 			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
@@ -28,16 +28,16 @@ exports.send_kismet = function(req, res, next) {
 			}
 			//console.log('cp_api.server.controller.kismet: signed tx:' + signed_tx_hex);
 
-			cp_api.broadcast_tx(signed_tx_hex, function(err, data) {
+			cp_api.broadcast_tx(signed_tx_hex, function(err, tx_id) {
 				if(err) {
 					console.log('cp_api.server.controller.kismet: ERROR: ' + err);
 					return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
 				}
 				//console.log('cp_api.server.controller.kismet: returned data' + data);
 
-				if(data)
+				if(tx_id)
 				{
-					req.locals = {'tx': data};
+					req.locals = {'tx_id': tx_id};
 					console.log('request.locals.tx: ' + req.locals.tx);
 					next();
 				}

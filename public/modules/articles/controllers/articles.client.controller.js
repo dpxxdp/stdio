@@ -109,6 +109,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			article.$kismet(function() {
 				//$location.path('articles/' + article._id);
 			}, function(errorResponse) {
+				article.kismet -= 1;
 				$scope.error = errorResponse.data.message;
 			});
 		};

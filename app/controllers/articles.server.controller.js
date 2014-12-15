@@ -57,18 +57,34 @@ exports.update = function(req, res) {
 };
 
 exports.kismet = function(req, res) {
-	var article = req.article;
+	var id = req.article._id;
+	console.log('articles.server.controller.kismet: sending kismet to: ' + id);
 
-	article = _.extend(article, req.body);
-
-	article.save(function(err) {
+	Article.findById(id).exec(function(err, article) {
 		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
+			console.log('articles.server.controller.kismet: findbyId ERROR: ' + err);
+			return res.status(400).send({	message: errorHandler.getErrorMessage(err)	});
+		} else if (!article) {
+			console.log('articles.server.controller.kismet: ERROR: no article found for id: ' + id);
+			return res.status(400).send(new Error('Failed to load article ' + id));
 		} else {
-			res.json(article);
+			var updated_article = article;
+			updated_article.kismet += 1;
+			console.log('articles.server.controller.kismet: updating kismet' + updated_article.kismet);
+			updated_article.save(function(err) {
+				if (err) {
+					console.log('articles.server.controller.kismet: save ERROR: ' + err);
+					return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					console.log('articles.server.controller.kismet: new kismet' + article.kismet);
+					res.json(article);
+				}
+			});
+
 		}
+
 	});
 };
 

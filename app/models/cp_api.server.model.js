@@ -25,7 +25,7 @@ exports.sign_tx = function(unsigned_tx_hex, privkey, callback) {
     this.https_client(body, function(err, signed_tx_hex){
 		if(err) { return callback(err); }
 		console.log('cp_api.server.model.sign_tx: signed:' + signed_tx_hex);
-		callback(null, signed_tx_hex, this);
+		callback(null, signed_tx_hex);
     });
 };
 
@@ -38,10 +38,10 @@ exports.broadcast_tx = function(signed_tx_hex, callback) {
 		'jsonrpc' : '2.0',
 		'id' : Date.now(),
 	};
-    this.https_client(body, function(err, data){
+    this.https_client(body, function(err, tx_id){
 		if(err) { return callback(err); }
 		//console.log('data');
-		callback(null, data, this);
+		callback(null, tx_id);
     });
 };
 
@@ -60,13 +60,13 @@ exports.create_send = function(source, dest, amt, currency, callback) {
         'id': Date.now(),
     };
 
-    this.https_client(body, function(err, data, api){
+    this.https_client(body, function(err, data){
 		if(err) {
 			console.log('cp_api.server.model.create_send: https_client called back w/ ERROR: ' + err);
 			return callback(err);
 		}
 		//console.log('cp_api.server.model.create_send: https_client called back w/ data: ' + data);
-		callback(null, data, api);
+		callback(null, data);
     });
 };
 
@@ -91,7 +91,7 @@ exports.create_issuance = function(source, asset, quantity, divisible, descripti
     this.https_client(body, function(err, data){
 		if(err) { return callback(err); }
 		//console.log('data');
-		callback(null, data, this);
+		callback(null, data);
     });
 };
 
@@ -115,7 +115,7 @@ exports.create_dividend = function(source, asset, dividend_asset, quantity_per_u
     this.https_client(body, function(err, data){
 		if(err) { return callback(err); }
 		//console.log('data');
-		callback(null, data, this);
+		callback(null, data);
     });
 };
 
@@ -136,7 +136,7 @@ exports.get_balances = function(address, callback) {
     this.https_client(body, function(err, data){
 		if(err) { return callback(err); }
 		//console.log('data');
-		callback(null, data, this);
+		callback(null, data);
     });
 };
 
