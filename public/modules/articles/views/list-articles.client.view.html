@@ -10,7 +10,7 @@
 		<i class="glyphicon glyphicon-align-justify"></i>
 	</a><-post something
 
-	<span ng-show="true"> | <input type="checkbox" ng-model="devMode">dev mode </span>
+	<span ng-show="false"> | <input type="checkbox" ng-model="devMode">dev mode </span>
 
 	<div ng-show="createVisible" class="article-container" >
 		<form name="articleForm" data-ng-submit="create()" novalidate>
@@ -36,7 +36,6 @@
 			<i class="glyphicon glyphicon-chevron-left"></i>
 		</a>
 
-<!-- hiding kismet for now
 --and hiding delete for dev use lol
 		<a ng-click="remove(article)">
 			<i class="glyphicon glyphicon-trash"></i>
