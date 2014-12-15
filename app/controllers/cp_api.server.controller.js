@@ -10,12 +10,39 @@ exports.kismet = function(req, res, next) {
 	var dest = req.article.address;
 	var privKey = req.user.privKey;
 
-	cp_api.kismet(source, dest, privKey, function(err,data) {
-		if (err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }
-		if(data.error) { return res.status(400).send({ message: errorHandler.getErrorMessage(data.error) }); }
+	var amt = 1;
+	var currency = 'KSMT';
+	//console.log('cp_api.server.controller: sending kismet to: ' + dest);
 
-		req.blockchain.result = data.result;
-		next();
+	cp_api.create_send(source, dest, amt, currency, function(err, unsigned_tx_hex, api) {
+		if(err) {
+			console.log('cp_api.server.controller.kismet: ERROR: ' + err);
+			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+		}
+		//console.log('cp_api.server.controller.kismet: created tx:' + unsigned_tx_hex);
+
+		cp_api.sign_tx(unsigned_tx_hex, privKey, function(err, signed_tx_hex) {
+			if(err) {
+				console.log('cp_api.server.controller.kismet: ERROR: ' + err);
+				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+			}
+			//console.log('cp_api.server.controller.kismet: signed tx:' + signed_tx_hex);
+
+			cp_api.broadcast_tx(signed_tx_hex, function(err, data) {
+				if(err) {
+					console.log('cp_api.server.controller.kismet: ERROR: ' + err);
+					return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+				}
+				//console.log('cp_api.server.controller.kismet: returned data' + data);
+
+				if(data)
+				{
+					req.locals = {'tx': data};
+					console.log('request.locals.tx: ' + req.locals.tx);
+					next();
+				}
+			});
+		});
 	});
 };
 
@@ -26,7 +53,6 @@ exports.my_ksmt = function(req, res) {
 		if (err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }
 		res.json(data);
 	});
-
 };
 
 //TODO: Insecure password passing

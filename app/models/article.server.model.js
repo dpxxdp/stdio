@@ -44,8 +44,12 @@ var ArticleSchema = new Schema({
 	},
 	address: {
 		type: String,
-		default: '',
+		default: 'an_article_address',
 		trim: true,
+	},
+	kismet: {
+		type: Number,
+		default: 0,
 	}
 });
 
