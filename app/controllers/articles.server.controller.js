@@ -39,9 +39,9 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
 	var article = req.article;
-
-console.log('resetting parent');
-	article.parent = '';//article.id;
+	
+	//console.log('resetting parent');
+	//article.parent = '';//article.id;
 
 	article = _.extend(article, req.body);
 
@@ -57,26 +57,19 @@ console.log('resetting parent');
 };
 
 exports.kismet = function(req, res) {
-	var json_rpc_req = req.body;
-	var method = json_rpc_req.method;
-	var params = json_rpc_req.params;
+	var article = req.article;
 
-	switch(method) {
-	case 'SEND':
-		Article.findOneAndUpdate(
-			{id: req.article.id},
-			{$inc: {'articles.kismet': params.amt}},
-			{upsert: true},
-			function(err, article) {
-				if(err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }
-				else {
-					res.json(article);
-				}
+	article = _.extend(article, req.body);
+
+	article.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
 			});
-		break;
-	default:
-		break;
-	}
+		} else {
+			res.json(article);
+		}
+	});
 };
 
 /**
