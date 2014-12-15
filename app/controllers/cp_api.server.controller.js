@@ -5,7 +5,7 @@ var errorHandler = require('./errors.server.controller');
 
 
 //TODO: Insecure password passing
-exports.kismet = function(req, res, next) {
+exports.send_kismet = function(req, res, next) {
 	var source = req.user.address;
 	var dest = req.article.address;
 	var privKey = req.user.privKey;
@@ -48,11 +48,13 @@ exports.kismet = function(req, res, next) {
 
 //TODO: Insecure password passing
 exports.my_ksmt = function(req, res) {
+	var address = req.user.address;
 
-	cp_api.get_balances(req.user.wallet, function(err, data){
+	cp_api.get_balances(address, function(err, data){
 		if (err) { return res.status(400).send({ message: errorHandler.getErrorMessage(err) }); }
 		res.json(data);
 	});
+
 };
 
 //TODO: Insecure password passing
