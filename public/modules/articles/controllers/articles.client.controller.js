@@ -13,10 +13,14 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			'There is no smoking in the spot',
 			'Spotted leopards everywhere',
 			'For all your spot hitting needs',
-			'There once was a man from nantucket..'		
+			'There once was a man from nantucket..'
 		]
 
 		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
+
+		$scope.switchShowFull = function(repeatScope){
+			repeatScope.showFull = !repeatScope.showFull;
+		};
 
 		$scope.createVisible = false;
 		$scope.switchCreateVisible = function(){

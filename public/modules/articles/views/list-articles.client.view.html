@@ -1,13 +1,16 @@
 <section data-ng-controller="ArticlesController" data-ng-init="find()">
-	<div class="page-header">
+	<div>
 		<h1>{{WelcomeToTheSpot}}</h1>
 	</div>
 
 <div class="container">
 
+	<!-- <button class="myButton" type="button">New Post</button> -->
 	<a style="cursor:pointer" ng-click="switchCreateVisible()">
 		<i class="glyphicon glyphicon-align-justify"></i>
 	</a><-post something
+
+	<span ng-show="false"> | <input type="checkbox" ng-model="devMode">dev mode </span>
 
 	<div class="col-md-12" >
 		<form ng-show="createVisible" name="articleForm" class="form-horizontal" data-ng-submit="create()" novalidate>
@@ -35,41 +38,54 @@
 	</div>
 </div>
 
-<div class="container">
-	<div class="list-group">
-		<span data-ng-repeat="article in articles" class="list-group-item">
+<div class="container" ng-class="{'dev-mode':devMode}">
+	<div data-ng-repeat="article in articles" class="article-container" ng-class="{'dev-mode':devMode}">
 
-
-			<span data-ng-bind="article.kismet"></span>
-			<a ng-click="kismet(article)">
-				<i class="glyphicon glyphicon-chevron-left"></i>
-			</a>
+<!-- hiding kismet for now
+		<span data-ng-bind="article.kismet"></span>
+		<a ng-click="kismet(article)">
+			<i class="glyphicon glyphicon-chevron-left"></i>
+		</a>
 
 <!-- hiding kismet for now
 --and hiding delete for dev use lol
-			<a ng-click="remove(article)">
-				<i class="glyphicon glyphicon-trash"></i>
-			</a>
+		<a ng-click="remove(article)">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
 -->
-			<small class="list-group-item-text">
-				Posted on
-				<span data-ng-bind="article.created | date:'mediumDate'"></span>
-				by
-				<span data-ng-bind="article.user.displayName"></span>
-
-			</small>
-<!--
-			<span data-ng-bind="article._id"></span> -
-			<span data-ng-bind="article.parent"></span>
--->
-			<a data-ng-href="#!/articles/{{article._id}}">
-				<h4  class="list-group-item-heading" data-ng-bind="article.title"></h4>
-			</a>
-			<p class="list-group-item-text" data-ng-bind="article.content"></p>
+		<span class="post-header" ng-class="{'dev-mode':devMode}">
+			Posted on
+			<span data-ng-bind="article.created | date:'mediumDate'"></span>
+			by
+			<span data-ng-bind="article.user.displayName"></span>
 		</span>
+
+	<div ng-class="{'dev-mode':devMode}">
+		<a data-ng-href="#!/articles/{{article._id}}">
+			<span data-ng-bind="article.title" class="post-title" ng-class="{'dev-mode':devMode}"></span>
+		</a>
 	</div>
+
+<!--
+		<span data-ng-bind="article._id"></span> -
+		<span data-ng-bind="article.parent"></span>
+-->
+		<!--class="list-group-item-text"-->
+		<span ng-show="article.content.length > 300" style ="margin-right:-21px" ng-class="{'dev-mode':devMode}">
+			<a style="cursor:pointer" ng-click="switchShowFull(this)">
+				<i style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-resize-full':!showFull, 'glyphicon-resize-small':showFull}"></i>
+			</a><!--show {{showFull ? 'less' : 'more'}} -->
+		</span>
+
+		<div class="post" ng-class="{'dev-mode':devMode}">
+			<span ng-show="!showFull"><span class="post-preview" ng-class="{'dev-mode':devMode}" data-ng-bind="article.content.substring(0,300)"></span><span ng-show="article.content.length > 300" ng-click="switchShowFull(this)" style="cursor:pointer" >[...]</span></span>
+			<span ng-show="showFull" class="post-full" ng-class="{'dev-mode':devMode}" data-ng-bind="article.content"></span>
+		</div>
+	</div>
+<!--
 	<div class="alert alert-warning text-center" data-ng-if="articles.$resolved && !articles.length">
 		No articles yet, why don't you <a href="/#!/articles/create">create one</a>?
 	</div>
+-->
 </div>
 </section>
