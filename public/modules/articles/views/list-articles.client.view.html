@@ -3,36 +3,25 @@
 		<h1>{{WelcomeToTheSpot}}</h1>
 	</div>
 
-<div class="container">
+<div class="container" style="padding:5px" ng-class="{'dev-mode':devMode}">
 
 	<!-- <button class="myButton" type="button">New Post</button> -->
 	<a style="cursor:pointer" ng-click="switchCreateVisible()">
 		<i class="glyphicon glyphicon-align-justify"></i>
 	</a><-post something
 
-	<span ng-show="false"> | <input type="checkbox" ng-model="devMode">dev mode </span>
+	<span ng-show="true"> | <input type="checkbox" ng-model="devMode">dev mode </span>
 
-	<div class="col-md-12" >
-		<form ng-show="createVisible" name="articleForm" class="form-horizontal" data-ng-submit="create()" novalidate>
+	<div ng-show="createVisible" class="article-container" >
+		<form name="articleForm" data-ng-submit="create()" novalidate>
 			<fieldset>
-				<div class="form-group"> <!--ng-class="{ 'has-error': articleForm.title.$dirty && articleForm.title.$invalid }"-->
-					<label class="control-label" for="title">Title</label>
-					<div class="controls">
-						<input name="title" type="text" data-ng-model="title" id="title" class="form-control" placeholder="Title" required>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label" for="content">Post</label>
-					<div class="controls">
-						<textarea placeholder="{{WelcomeToTheSpot}}" name="content" data-ng-model="content" id="content" class="form-control" cols="30" rows="5"></textarea>
-					</div>
-				</div>
-				<div class="form-group">
-					<input type="submit" value="Post it!" class="btn btn-default">
-				</div>
-				<div data-ng-show="error" class="text-danger">
+
+					<input name="title" type="text" data-ng-model="title" id="title" class="post-title-entry" placeholder="Choose a title" required>
+					<textarea placeholder="Type here!" name="content" data-ng-model="content" id="content" class="post-entry"></textarea>
+				<input type="submit" style="display:block" value="Post it!" class="myButton post">
+				<span data-ng-show="error" class="text-danger">
 					<strong data-ng-bind="error"></strong>
-				</div>
+				</span>
 			</fieldset>
 		</form>
 	</div>
