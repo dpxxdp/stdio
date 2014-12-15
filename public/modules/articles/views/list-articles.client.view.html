@@ -30,13 +30,12 @@
 <div class="container" ng-class="{'dev-mode':devMode}">
 	<div data-ng-repeat="article in articles" class="article-container" ng-class="{'dev-mode':devMode}">
 
-<!-- hiding kismet for now
 		<span data-ng-bind="article.kismet"></span>
-		<a ng-click="kismet(article)">
-			<i class="glyphicon glyphicon-chevron-left"></i>
+		<a style="cursor:pointer" ng-click="kismet(article)">
+			<i style="color:grey" class="glyphicon glyphicon-chevron-left"></i>
 		</a>
 
---and hiding delete for dev use lol
+<!--and hiding delete for dev use lol
 		<a ng-click="remove(article)">
 			<i class="glyphicon glyphicon-trash"></i>
 		</a>
@@ -45,7 +44,7 @@
 			Posted on
 			<span data-ng-bind="article.created | date:'mediumDate'"></span>
 			by
-			<span data-ng-bind="article.user.displayName"></span>
+			<span data-ng-bind="article.user.username"></span>
 		</span>
 
 	<div ng-class="{'dev-mode':devMode}">
