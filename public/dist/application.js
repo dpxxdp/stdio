@@ -60,6 +60,7 @@ ApplicationConfiguration.registerModule('users');
 'use strict';
 
 // Configuring the Articles module
+/*
 angular.module('articles').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
@@ -68,6 +69,8 @@ angular.module('articles').run(['Menus',
 		Menus.addSubMenuItem('topbar', 'articles', 'New Post', 'articles/create');
 	}
 ]);
+*/
+
 'use strict';
 
 // Setting up route
@@ -81,7 +84,7 @@ angular.module('articles').config(['$stateProvider',
 		}).
 		state('createArticle', {
 			url: '/articles/create',
-			templateUrl: 'modules/articles/views/create-article.client.view.html'
+			templateUrl: 'modules/articles/views/list-articles.client.view.html'
 		}).
 		state('viewArticle', {
 			url: '/articles/:articleId',
@@ -93,11 +96,35 @@ angular.module('articles').config(['$stateProvider',
 		});
 	}
 ]);
+
 'use strict';
 
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles', 'Comments',
 	function($scope, $stateParams, $location, Authentication, Articles, Comments) {
 		$scope.authentication = Authentication;
+
+		var welcomeToTheSpot = [
+			'Welcome to the Spot',
+			'Your spot is now hit',
+			'Cigarette spot, smoke em if you got em',
+			'You are now a spot',
+			'See spot play bongos',
+			'There is no smoking in the spot',
+			'Spotted leopards everywhere',
+			'For all your spot hitting needs',
+			'There once was a man from nantucket..'
+		]
+
+		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
+
+		$scope.switchShowFull = function(repeatScope){
+			repeatScope.showFull = !repeatScope.showFull;
+		};
+
+		$scope.createVisible = false;
+		$scope.switchCreateVisible = function(){
+			$scope.createVisible = !$scope.createVisible;
+		};
 
 		$scope.create = function() {
 			var article = new Articles({
@@ -106,12 +133,15 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 
 			article.parent = 'top'; //by default the articles list only shows where parent = 'top'
+			article.user = this.user;
 
 			article.$save(function(response) {
-				$location.path('articles/' + response._id);
+				//$location.path('articles/' + response._id);
 
 				$scope.title = '';
 				$scope.content = '';
+				$scope.articles.unshift(article); //push it to the display
+				$scope.createVisible = !$scope.createVisible;
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -272,8 +302,22 @@ angular.module('boardroom').config(['$stateProvider',
 			url: '/boardroom',
 			templateUrl: 'modules/boardroom/views/boardroom.client.view.html'
 		});
+
+		$stateProvider.
+		state('proposals', {
+			url: '/boardroom/proposals/:id',
+			templateUrl: 'modules/boardroom/views/boardroom.client.view.html'
+		});
+
+		$stateProvider.
+		state('owners', {
+			url: '/boardroom/owners',
+			templateUrl: 'modules/boardroom/views/boardroom.client.view.html'
+		});
+
 	}
 ]);
+
 'use strict';
 
 
@@ -295,7 +339,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 		$stateProvider.
 		state('home', {
 			url: '/',
-			templateUrl: 'modules/core/views/home.client.view.html'
+			templateUrl: 'modules/articles/views/list-articles.client.view.html'
 		});
 
 		$stateProvider.
@@ -305,6 +349,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 		});
 	}
 ]);
+
 'use strict';
 
 angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus',
