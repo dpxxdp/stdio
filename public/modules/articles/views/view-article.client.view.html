@@ -1,69 +1,62 @@
 <section data-ng-controller="ArticlesController" data-ng-init="findOne()">
 	<div class="page-header">
-		<h1 data-ng-bind="article.title"></h1>
+
+		<div>
+				<span style="color:#999" data-ng-bind="article.kismet"></span>
+				<a style="cursor:pointer" ng-click="kismet(article)">
+					<i style="color:#999" class="glyphicon glyphicon-chevron-left"></i>
+				</a>
+
+				<span class="post-header" ng-class="{'dev-mode':devMode}">
+					Posted on
+					<span data-ng-bind="article.created | date:'mediumDate'"></span>
+					by
+					<span data-ng-bind="article.user.username"></span>
+				</span>
+		</div>
+
+
+		<h1 style="display:inline; color:#337ab7" data-ng-bind="article.title"></h1>
+
+		<span data-ng-show="authentication.user._id == article.user._id">
+			<a href="/#!/articles/{{article._id}}/edit">
+				<i style="color:#999" class="glyphicon glyphicon-edit"></i>
+			</a>
+			<a data-ng-click="remove();">
+				<i style="color:#999" class="glyphicon glyphicon-trash"></i>
+			</a>
+		</span>
+
 	</div>
 
-	<div class="pull-right" data-ng-show="authentication.user._id == article.user._id">
-		<a class="btn btn-primary" href="/#!/articles/{{article._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
-	</div>
+	<div class="post" ng-class="{'dev-mode':devMode}">
+		<span class="post-full" ng-class="{'dev-mode':devMode}" data-ng-bind="article.content"></span>
+	<div>
 
-<!-- hiding kismet for now
-	<div class="pull-right">
-		<a class="btn btn-primary" ng-click="kismet()">
-			<i class="glyphicon glyphicon-chevron-up"></i>
-		</a>
-		<a class="btn btn-primary" ng-click="unkismet()">
-			<i class="glyphicon glyphicon-chevron-down"></i>
-		</a>
-	</div>
--->
-	<small>
-		<em class="text-muted">
-			<span data-ng-bind="article.kismet"></span>
-<!--
-		<a ng-click="kismet()">
-			<i class="glyphicon glyphicon-chevron-left"></i>
-		</a>
--->
-		what's kismet?
-	</em>
+<br><h2 style="color:#999">comments:</h2>
 
-	</small>
-	<small>
-		<em class="text-muted">
-			posted by
-			<span data-ng-bind="article.user.displayName"></span>
-			on
-			<span data-ng-bind="article.created | date:'mediumDate'"></span>
-		</em>
-	</small>
-	<p style="background-color:lightgrey;padding:5px" class="lead" data-ng-bind="article.content"></p>
-
-	<a ng-click="showcomment()">
-		<i class="glyphicon glyphicon-align-justify"></i>
+	<a style="cursor:pointer" ng-click="showcomment()">
+		<i style="color:#999" class="glyphicon glyphicon-align-justify"></i>
 	</a> <-click to add a comment!
 
   <form ng-show="showComment">
 		<textarea name="comment" data-ng-model="content" class="form-control" cols="10" rows="5" placeholder="Write something!"></textarea>
-  	<input type="submit" ng-click="createComment()" value="Save" />
+  	<input type="submit" ng-click="createComment()" value="Save" class="myButton"/>
 	</form>
 
-	<br><h2>comments:</h2>
-	<div ng-repeat="comment in comments">
-		<small>
-			<em class = "text-muted">
-				posted by
-				<span data-ng-bind="comment.user.displayName"></span>
-				on
+	<div ng-repeat="comment in comments" class="article-container">
+		<div>
+			<span class="post-header" ng-class="{'dev-mode':devMode}">
+				Posted on
 				<span data-ng-bind="comment.created | date:'mediumDate'"></span>
-			</em>
-		</small>
-		<p style="background-color:lightgrey;padding:5px" data-ng-bind="comment.content"></p>
+				by
+				<span data-ng-bind="comment.user.username"></span>
+			</span>
+		</div>
+
+		<div class="post" ng-class="{'dev-mode':devMode}">
+			<span class="post-full" ng-class="{'dev-mode':devMode}" data-ng-bind="comment.content"></span>
+		<div>
 	</div>
 
 <!--

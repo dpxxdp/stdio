@@ -7,7 +7,7 @@
 
 	<!-- <button class="myButton" type="button">New Post</button> -->
 	<a style="cursor:pointer" ng-click="switchCreateVisible()">
-		<i class="glyphicon glyphicon-align-justify"></i>
+		<i style="color:#999" class="glyphicon glyphicon-align-justify"></i>
 	</a><-post something
 
 	<span ng-show="false"> | <input type="checkbox" ng-model="devMode">dev mode </span>
@@ -18,6 +18,7 @@
 
 					<input name="title" type="text" data-ng-model="title" id="title" class="post-title-entry" placeholder="Choose a title" required>
 					<textarea placeholder="Type here!" name="content" data-ng-model="content" id="content" class="post-entry"></textarea>
+
 				<input type="submit" style="display:block" value="Post it!" class="myButton post">
 				<span data-ng-show="error" class="text-danger">
 					<strong data-ng-bind="error"></strong>
@@ -30,9 +31,9 @@
 <div class="container" ng-class="{'dev-mode':devMode}">
 	<div data-ng-repeat="article in articles" class="article-container" ng-class="{'dev-mode':devMode}">
 
-		<span data-ng-bind="article.kismet"></span>
+		<span style="color:#999" data-ng-bind="article.kismet"></span>
 		<a style="cursor:pointer" ng-click="kismet(article)">
-			<i style="color:grey" class="glyphicon glyphicon-chevron-left"></i>
+			<i style="color:#999" class="glyphicon glyphicon-chevron-left"></i>
 		</a>
 
 <!--and hiding delete for dev use lol
@@ -60,7 +61,7 @@
 		<!--class="list-group-item-text"-->
 		<span ng-show="article.content.length > 300" style ="margin-right:-21px" ng-class="{'dev-mode':devMode}">
 			<a style="cursor:pointer" ng-click="switchShowFull(this)">
-				<i style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-resize-full':!showFull, 'glyphicon-resize-small':showFull}"></i>
+				<i style="color:#999" class="glyphicon" ng-class="{'glyphicon-resize-full':!showFull, 'glyphicon-resize-small':showFull}"></i>
 			</a><!--show {{showFull ? 'less' : 'more'}} -->
 		</span>
 

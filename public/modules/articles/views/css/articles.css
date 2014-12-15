@@ -78,10 +78,9 @@ hr {
   margin: 20px 0px 0px 25px;
   width:75%;
   height:6em;
-  color: grey;
+  color: #666;
   border:none;
   border-bottom: 1px solid #ccc;
-  border-left: 1px solid #ccc;
   outline:none;
 }
 
