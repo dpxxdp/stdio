@@ -89,9 +89,13 @@ var UserSchema = new Schema({
 	resetPasswordExpires: {
 		type: Date
 	},
-	wallet: {
-		type: Schema.ObjectId,
-		ref: 'Wallet'
+	address: {
+		type: String,
+		default: '1234567890',
+	},
+	privKey: {
+		type: String,
+		default: '0987654321',
 	},
 	kismet: {
 		type: Number,
