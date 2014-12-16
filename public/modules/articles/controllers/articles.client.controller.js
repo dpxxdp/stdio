@@ -13,8 +13,12 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			'There is no smoking in the spot',
 			'Spotted leopards everywhere',
 			'For all your spot hitting needs',
-			'There once was a man from nantucket..'
-		]
+			'There once was a man from nantucket..',
+			'I spy',
+			'Somebody poisoned the water spot',
+			'This is no child\'s spot',
+			'When one spot is worth twice the trouble'
+		];
 
 		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
 
