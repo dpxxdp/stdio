@@ -57,35 +57,53 @@ exports.update = function(req, res) {
 };
 
 exports.kismet = function(req, res) {
-	var id = req.article._id;
-	console.log('articles.server.controller.kismet: sending kismet to: ' + id);
+	console.log('articles.server.controller.kismet: sending kismet to: ' + req.article._id);
 
-	Article.findById(id).exec(function(err, article) {
+	var conditions = { _id: req.article._id };
+	var update = { $inc: { kismet: 1 }};
+
+	Article.update(conditions, update, function(err, article) {
 		if (err) {
 			console.log('articles.server.controller.kismet: findbyId ERROR: ' + err);
 			return res.status(400).send({	message: errorHandler.getErrorMessage(err)	});
 		} else if (!article) {
-			console.log('articles.server.controller.kismet: ERROR: no article found for id: ' + id);
-			return res.status(400).send(new Error('Failed to load article ' + id));
+			console.log('articles.server.controller.kismet: ERROR: no article found for id: ' + req.article._id);
+			return res.status(400).send(new Error('Article does not exist: ' + req.article._id));
 		} else {
-			var updated_article = article;
-			updated_article.kismet += 1;
-			console.log('articles.server.controller.kismet: updating kismet' + updated_article.kismet);
-			updated_article.save(function(err) {
-				if (err) {
-					console.log('articles.server.controller.kismet: save ERROR: ' + err);
-					return res.status(400).send({
-						message: errorHandler.getErrorMessage(err)
-					});
-				} else {
-					console.log('articles.server.controller.kismet: new kismet' + article.kismet);
-					res.json(article);
-				}
-			});
-
+			res.status(200).send();
 		}
-
 	});
+
+
+
+
+	//Article.findById(id).exec(function(err, article) {
+	//	if (err) {
+	//		console.log('articles.server.controller.kismet: findbyId ERROR: ' + err);
+	//		return res.status(400).send({	message: errorHandler.getErrorMessage(err)	});
+	//	} else if (!article) {
+	//		console.log('articles.server.controller.kismet: ERROR: no article found for id: ' + id);
+	//		return res.status(400).send(new Error('Failed to load article ' + id));
+	//	} else {
+	//		console.log('articles.server.controller.kismet: article: ' + JSON.stringify(article));
+	//		//article = _.extend(article, req.body);
+	//		
+	//		console.log('articles.server.controller.kismet: updating kismet' + article.kismet);
+	//		article.save(function(err) {
+	//			if (err) {
+	//				console.log('articles.server.controller.kismet: save ERROR: ' + err);
+	//				return res.status(400).send({
+	//					message: errorHandler.getErrorMessage(err)
+	//				});
+	//			} else {
+	//				console.log('articles.server.controller.kismet: new kismet' + JSON.stringify(article));
+	//				res.json(article);
+	//			}
+	//		});
+//
+	//	}
+//
+	//});
 };
 
 /**
