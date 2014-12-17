@@ -146,22 +146,22 @@ exports.get_balances = function(address, callback) {
 ///////////////////////////////////////////////////////////////////////////////
 
 exports.https_client = function(body, callback) {
-	
+
 	var options = settings.requestOptions;
 	console.log('cp_api.server.model.https_client: with options:' + JSON.stringify(options));
 	//send request
 	var secureRequest = https.request(options, function(response) {
 		console.log('https_client: request called back with response' + response.statusCode);
-		
+
 		if(response.statusCode != '200'){
 			//console.log('cp_api.server.model.https_client: ' + JSON.stringify(response.headers));
 			return callback(JSON.stringify(response.statusCode));
 		}
-		
+
 		response.setEncoding('utf8');
-		
+
 		var responseBuff = '';
-		
+
 		response.on('data', function (chunk) {
 			responseBuff += chunk;
 		});
@@ -182,8 +182,13 @@ exports.https_client = function(body, callback) {
 	});
 
 	var bodyAsString = JSON.stringify(body);
+	console.log("cp trying to send request");
+
+	secureRequest.on('error', function(error){
+		console.log("caught an error");
+		callback(error);
+	});
 
 	secureRequest.write(bodyAsString);
 	secureRequest.end();
 };
-
