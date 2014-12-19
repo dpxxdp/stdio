@@ -12,8 +12,8 @@ var _ = require('lodash'),
 
 exports.settle_kismet = function(req, res, next) {
 	if(req.user.username === req.body.user.username) { return res.status(400).send({ message: 'That\'s your own article!' }); }
-	
-	User.findOne({ username: req.user.username }, function(err, user) {
+
+	User.findOne({ username: req.user.username },'-salt -password', function(err, user) {
 		if (!user) {
 			return res.status(400).send({
 				message: 'No account with that username has been found'
@@ -31,7 +31,7 @@ exports.settle_kismet = function(req, res, next) {
 };
 
 exports.send_kismet = function(req, res, next) {
-	User.findOne({ username: req.body.user.username }, function(err, user) {
+	User.findOne({ username: req.body.user.username },'-salt -password', function(err, user) {
 		if (!user) {
 			return res.status(400).send({
 				message: 'No account with that username has been found'
@@ -47,6 +47,16 @@ exports.send_kismet = function(req, res, next) {
 };
 
 exports.update_send = function(req, res, next) {
+	return res.status(500).send({
+		message: 'bad call to update_send - method not implemented'
+	});
+//the method implementation below is unsafe, so I'm commenting it out here
+//rather than taking req.user and then calling save,
+//we should pull the user from the db using req.user.username
+//and be sure to exclude password and salt from the query result
+//using findOne({query},'-password -salt', callback)
+// -kris
+/*
 	var user = req.user;
 	user.kismet--;
 	user.save(function(err) {
@@ -58,6 +68,7 @@ exports.update_send = function(req, res, next) {
 			next();
 		}
 	});
+*/
 };
 
 /**
