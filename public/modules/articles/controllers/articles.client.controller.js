@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles', 'Comments',
-	function($scope, $stateParams, $location, Authentication, Articles, Comments) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', '$animate', '$timeout', 'Authentication', 'Articles', 'Comments',
+	function($scope, $stateParams, $location, $animate, $timeout, Authentication, Articles, Comments) {
 		$scope.authentication = Authentication;
 
 		var welcomeToTheSpot = [
@@ -109,7 +109,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 		};
 
-		$scope.kismet = function(article) {
+		$scope.kismet = function(article, articleScope) {
 			if(!article)
 			{
 				article = $scope.article;
@@ -120,6 +120,10 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			}, function(errorResponse) {
 				article.kismet -= 1;
 				$scope.error = errorResponse.data.message;
+				articleScope.showError=true;
+				$timeout(function(){
+					articleScope.showError=false;
+				},2000);
 			});
 		};
 

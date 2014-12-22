@@ -78,7 +78,6 @@ exports.forgot = function(req, res, next) {
 						message: 'An email has been sent to ' + user.email + ' with further instructions.'
 					});
 				}
-
 				done(err);
 			});
 		}
@@ -137,7 +136,7 @@ exports.reset = function(req, res, next) {
 									if (err) {
 										res.status(400).send(err);
 									} else {
-										// Return authenticated user 
+										// Return authenticated user
 										res.json(user);
 
 										done(err, user);

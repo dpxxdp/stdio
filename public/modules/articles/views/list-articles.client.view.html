@@ -31,8 +31,13 @@
 <div class="container" ng-class="{'dev-mode':devMode}">
 	<div data-ng-repeat="article in articles" class="article-container" ng-class="{'dev-mode':devMode}">
 
+		<span  style="position:relative">
+			<div ng-show="showError" class="animate-errorPopup">
+				failed :(
+			</div>
+		</span>
 		<span style="color:#999" data-ng-bind="article.kismet"></span>
-		<a style="cursor:pointer" ng-click="kismet(article)">
+		<a style="cursor:pointer" ng-click="kismet(article, this)">
 			<i style="color:#999" class="glyphicon glyphicon-chevron-left"></i>
 		</a>
 

@@ -44,7 +44,8 @@ angular.element(document).ready(function() {
 'use strict';
 
 // Use Applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('articles');
+ApplicationConfiguration.registerModule('articles', ['ngAnimate']);
+
 'use strict';
 
 // Use Applicaion configuration module to register a new module
@@ -99,8 +100,8 @@ angular.module('articles').config(['$stateProvider',
 
 'use strict';
 
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles', 'Comments',
-	function($scope, $stateParams, $location, Authentication, Articles, Comments) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', '$animate', '$timeout', 'Authentication', 'Articles', 'Comments',
+	function($scope, $stateParams, $location, $animate, $timeout, Authentication, Articles, Comments) {
 		$scope.authentication = Authentication;
 
 		var welcomeToTheSpot = [
@@ -112,8 +113,12 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			'There is no smoking in the spot',
 			'Spotted leopards everywhere',
 			'For all your spot hitting needs',
-			'There once was a man from nantucket..'
-		]
+			'There once was a man from nantucket..',
+			'I spy',
+			'Somebody poisoned the water spot',
+			'This is no child\'s spot',
+			'When one spot is worth twice the trouble'
+		];
 
 		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
 
@@ -199,7 +204,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 		};
 
-		$scope.kismet = function(article) {
+		$scope.kismet = function(article, articleScope) {
 			if(!article)
 			{
 				article = $scope.article;
@@ -208,7 +213,12 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			article.$kismet(function() {
 				//$location.path('articles/' + article._id);
 			}, function(errorResponse) {
+				article.kismet -= 1;
 				$scope.error = errorResponse.data.message;
+				articleScope.showError=true;
+				$timeout(function(){
+					articleScope.showError=false;
+				},2000);
 			});
 		};
 
@@ -255,12 +265,12 @@ angular.module('articles')
 		{
 			update: {
 				method: 'PUT'
-				},
+			},
 			kismet: {
 				method: 'POST',
 				params: {
 					jsonrpc:'2.0',
-					method:'SEND',
+					method:'send_kismet',
 					params:{amt:1},
 					id:Date.now,
 				}
@@ -664,6 +674,7 @@ angular.module('users').controller('PasswordController', ['$scope', '$stateParam
 		// Submit forgotten password account id
 		$scope.askForPasswordReset = function() {
 			$scope.success = $scope.error = null;
+			$scope.clicked = 'processing request';
 
 			$http.post('/auth/forgot', $scope.credentials).success(function(response) {
 				// Show user success message and clear form
@@ -696,6 +707,7 @@ angular.module('users').controller('PasswordController', ['$scope', '$stateParam
 		};
 	}
 ]);
+
 'use strict';
 
 angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication',
