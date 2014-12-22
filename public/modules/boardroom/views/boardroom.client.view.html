@@ -1,4 +1,4 @@
-<section data-ng-controller="HomeController">
+<section data-ng-controller="BoardroomController">
 	<div class="jumbotron text-center">
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
@@ -10,8 +10,11 @@
 	<div class="row">
 		<div class="col-md-3">
 			<h2>Ownership</h2>
-			<p>You own {{authentication.user.kismet/10000}}% of stdio</p>
-			<a href="/#!/boardroom/owners">Breakdown of ownership</a>
+			<p>You own {{authentication.user.kismet}} ksmt</p>
+			<p>That is {{authentication.user.kismet/1000000}}% of all ksmt</p>
+			<a style="cursor:pointer" ng-click="owners()">
+				<i style="color:#999" class="glyphicon glyphicon-chevron-left"></i>
+			</a>
 		</div>
 		<div class="col-md-3">
 			<h2>Expenses</h2>
