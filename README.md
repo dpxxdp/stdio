@@ -1,3 +1,5 @@
+######hosted at <a href="http://stdio.io/">stdio.io</a>
+
 ##stdio is an experiment
 <p>
 We wanted to create a sustainable platform for text content. So we tried two things: we made our content creators our owners and we told them: if they wanted to keep it, they just had to sustain it.
