@@ -114,7 +114,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				//$location.path('articles/' + article._id);
 			}, function(errorResponse) {
 				article.kismet -= 1;
-				$scope.error = errorResponse.data.message;
+				articleScope.thisError = errorResponse.data.message;
 				articleScope.showError=true;
 				$timeout(function(){
 					articleScope.showError=false;

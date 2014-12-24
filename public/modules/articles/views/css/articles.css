@@ -7,6 +7,10 @@ hr {
     align: center;
 }
 
+a:hover, a:visited, a:link, a:active {
+  text-decoration: none;
+}
+
 .myButton {
 	-moz-box-shadow:inset 0px 1px 3px 0px #91b8b3;
 	-webkit-box-shadow:inset 0px 1px 3px 0px #91b8b3;
@@ -113,23 +117,34 @@ hr {
   /*border:2px solid purple;*/
 }
 
+.renderButton {
+  color: #aaa;
+  top: 5px;
+}
+
+.renderButtonGlow {
+  color: #f44;
+  top: 5px;
+}
+
 .animate-errorPopup {
 	position: absolute;
-  left:-55px;
-  bottom:-5px;
+  left:-58px;
+  top: 7px;
 	font-family: Arial, Helvetica, sans-serif;
 	z-index: 9999;
 	pointer-events: none;
   opacity:0.8;
-  width: 50px;
+  width: 55px;
   font-size:10px;
-  text-indent:5px;
-  padding: 0px, 0px, 0px, 10px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  text-indent: 5px;
+  text-align: center;
+  padding: 0px, 0px, 5px, 10px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   border: 1px solid black;
-  background: #f88;
+  background: #f99;
 /*background: -moz-linear-gradient(#fff, #999);
   background: -webkit-linear-gradient(#fff, #999);
   background: -o-linear-gradient(#fff, #999);

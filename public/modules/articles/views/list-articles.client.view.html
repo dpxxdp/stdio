@@ -33,7 +33,7 @@
 
 		<span  style="position:relative">
 			<div ng-show="showError" class="animate-errorPopup">
-				failed :(
+				{{thisError}}
 			</div>
 		</span>
 		<span style="color:#999" data-ng-bind="article.kismet"></span>
@@ -64,9 +64,9 @@
 		<span data-ng-bind="article.parent"></span>
 -->
 		<!--class="list-group-item-text"-->
-		<span ng-show="article.content.length > 300" style ="margin-right:-21px" ng-class="{'dev-mode':devMode}">
+		<span style ="position:relative; margin-right:-21px" ng-class="{'dev-mode':devMode}">
 			<a style="cursor:pointer" ng-click="switchShowFull(this)">
-				<i style="color:#999" class="glyphicon" ng-class="{'glyphicon-resize-full':!showFull, 'glyphicon-resize-small':showFull}"></i>
+				<i class="glyphicon glyphicon-flash" ng-class="{'renderButton':!showFull,'renderButtonGlow':showFull}"></i>
 			</a><!--show {{showFull ? 'less' : 'more'}} -->
 		</span>
 
