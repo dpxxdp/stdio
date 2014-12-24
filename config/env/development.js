@@ -1,7 +1,8 @@
 'use strict';
 
 module.exports = {
-	db: 'mongodb://192.168.1.4',
+	//db: 'mongodb://192.168.1.4',
+	db: 'mongodb://localhost',
 	port: process.env.PORT || 3000,
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'

@@ -15,9 +15,14 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			'For all your spot hitting needs',
 			'There once was a man from nantucket..',
 			'I spy',
-			'Somebody poisoned the water spot',
+			'Somebody poisoned the other spot',
 			'This is no child\'s spot',
-			'When one spot is worth twice the trouble'
+			'This spot is worth two in the bush',
+			'This is an open spot',
+			'Small spot: handle with care',
+			'The standard in out spot',
+			'Your text spot studio',
+			'A free spot',
 		];
 
 		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
