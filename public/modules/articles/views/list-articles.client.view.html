@@ -4,19 +4,76 @@
 	</div>
 
 <div class="container" style="padding:5px" ng-class="{'dev-mode':devMode}">
-
 	<!-- <button class="myButton" type="button">New Post</button> -->
-	<a style="cursor:pointer" ng-click="switchCreateVisible()">
-		<i style="color:#999" class="glyphicon glyphicon-align-justify"></i>
-	</a><-post something
+	<div style="font-size:1.5em">
+		<span title="Create a post!">
+			<a ng-click="switchCreateVisible()">
+				<span ng-class='userSelectedColor'>
+					<i ng-class="{'article-ui':!createVisible, 'article-ui-clicked':createVisible}" class="glyphicon glyphicon-align-justify"></i>
+				</span>
+			</a>
+		</span>
+
+		<span title="Switch sort order.">
+			<a ng-click="sortAndUpdate('reverse')">
+				<span ng-class='userSelectedColor'>
+					<i ng-class="{'article-ui':sortDesc, 'article-ui-clicked':!sortDesc}" class="glyphicon glyphicon-sort-by-attributes"></i>
+				</span>
+			</a>
+		</span>
+
+		<span title="Sort by kismet">
+			<a ng-click="sortAndUpdate('kismet')">
+				<span ng-class='userSelectedColor'>
+					<i ng-class="{'article-ui':sortBy!='kismet', 'article-ui-clicked':sortBy=='kismet'}" class="glyphicon glyphicon-star"></i>
+				</span>
+			</a>
+		</span>
+
+		<span title="Sort by date.">
+			<a ng-click="sortAndUpdate('created')">
+				<span ng-class='userSelectedColor'>
+					<i ng-class="{'article-ui':sortBy!='created', 'article-ui-clicked':sortBy=='created'}" class="glyphicon glyphicon-calendar"></i>
+				</span>
+			</a>
+		</span>
+
+<!-- hiding some random extra controls
+		<span title="Play with colors!">
+			<a ng-click="switchColorsVisible()">
+				<span ng-class='userSelectedColor'>
+					<i ng-class="{'article-ui':!colorsVisible, 'article-ui-clicked':colorsVisible}" class="glyphicon glyphicon-tint"></i>
+				</span>
+			</a>
+		</span>
+		<span title="Reduced UI mode.">
+			<a ng-click="switchSimpleUI()">
+				<span ng-class='userSelectedColor'>
+					<i ng-class="{'article-ui':!simpleUI, 'article-ui-clicked':simpleUI}" class="glyphicon glyphicon-eye-open"></i>
+				</span>
+			</a>
+		</span>
+-->
+
+	</div>
 
 	<span ng-show="false"> | <input type="checkbox" ng-model="devMode">dev mode </span>
+
+	<div ng-show="colorsVisible">
+		<form action="">
+			<input type="radio" ng-model="userSelectedColor" value="Red">red
+			<input type="radio" ng-model="userSelectedColor" value="Orange">orange
+			<input type="radio" ng-model="userSelectedColor" value="Green">green
+			<input type="radio" ng-model="userSelectedColor" value="Blue">blue
+			<input type="radio" ng-model="userSelectedColor" value="Purple">purple
+		</form>
+	</div>
 
 	<div ng-show="createVisible" class="article-container" >
 		<form name="articleForm" data-ng-submit="create()" novalidate>
 			<fieldset>
 
-					<input name="title" type="text" data-ng-model="title" id="title" class="post-title-entry" placeholder="Choose a title" required>
+					<input name="title" type="text" data-ng-model="title" id="title" class="post-title-entry" ng-class="userSelectedColor" placeholder="Choose a title" required>
 					<textarea placeholder="Type here!" name="content" data-ng-model="content" id="content" class="post-entry"></textarea>
 
 				<input type="submit" style="display:block" value="Post it!" class="myButton post">
@@ -33,12 +90,12 @@
 
 		<span  style="position:relative">
 			<div ng-show="showError" class="animate-errorPopup">
-				{{thisError}}
+				<span style="padding: 5px 5px 5px 5px">{{thisError}}</span>
 			</div>
 		</span>
 		<span style="color:#999" data-ng-bind="article.kismet"></span>
 		<a style="cursor:pointer" ng-click="kismet(article, this)">
-			<i style="color:#999" class="glyphicon glyphicon-chevron-left"></i>
+			<i style="color:#bbb" class="glyphicon glyphicon-star"></i>
 		</a>
 
 <!--and hiding delete for dev use lol
@@ -55,7 +112,7 @@
 
 	<div ng-class="{'dev-mode':devMode}">
 		<a data-ng-href="#!/articles/{{article._id}}">
-			<span data-ng-bind="article.title" class="post-title" ng-class="{'dev-mode':devMode}"></span>
+			<span data-ng-bind="article.title" class="post-title" ng-class="userSelectedColor"></span>
 		</a>
 	</div>
 
@@ -64,8 +121,8 @@
 		<span data-ng-bind="article.parent"></span>
 -->
 		<!--class="list-group-item-text"-->
-		<span style ="position:relative; margin-right:-21px" ng-class="{'dev-mode':devMode}">
-			<a style="cursor:pointer" ng-click="switchShowFull(this)">
+		<span title="Render all" style ="position:relative;" ng-class="{'dev-mode':devMode}">
+			<a ng-show="!simpleUI" style="cursor:pointer; position:absolute" ng-click="switchShowFull(this)">
 				<i class="glyphicon glyphicon-flash" ng-class="{'renderButton':!showFull,'renderButtonGlow':showFull}"></i>
 			</a><!--show {{showFull ? 'less' : 'more'}} -->
 		</span>

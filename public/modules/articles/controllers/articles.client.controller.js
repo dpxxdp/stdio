@@ -3,6 +3,9 @@
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', '$animate', '$timeout', 'Authentication', 'Articles', 'Comments',
 	function($scope, $stateParams, $location, $animate, $timeout, Authentication, Articles, Comments) {
 		$scope.authentication = Authentication;
+		$scope.userSelectedColor = 'Blue';
+		//if(authentication.user.color)
+		//	$scope.userSelectedColor = authentication.user.color;
 
 		var welcomeToTheSpot = [
 			'Welcome to the Spot',
@@ -24,17 +27,27 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			'Your text spot studio',
 			'A free spot',
 		];
-
 		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
 
 		$scope.switchShowFull = function(repeatScope){
 			repeatScope.showFull = !repeatScope.showFull;
 		};
 
+		$scope.colorsVisible = false;
+		$scope.switchColorsVisible = function(){
+			$scope.colorsVisible = !$scope.colorsVisible;
+		};
+
 		$scope.createVisible = false;
 		$scope.switchCreateVisible = function(){
 			$scope.createVisible = !$scope.createVisible;
 		};
+
+		$scope.simpleUI = false;
+		$scope.switchSimpleUI = function(){
+			$scope.simpleUI = !$scope.simpleUI;
+		};
+
 
 		$scope.create = function() {
 			var article = new Articles({
@@ -139,8 +152,22 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 		};
 
+		$scope.sortBy = 'kismet';
+		$scope.sortDesc = true;
+		$scope.sortAndUpdate = function(sorter){
+			if(sorter==='reverse')
+				$scope.sortDesc = !$scope.sortDesc
+			else
+			{
+				$scope.sortBy = sorter;
+			}
+
+			$scope.find();
+		}
+
 		$scope.find = function() {
-			$scope.articles = Articles.query();
+	//		$scope.articles = Articles.query();
+			$scope.articles = Articles.list({sortBy:($scope.sortDesc?'-':'') + $scope.sortBy});
 		};
 
 		$scope.findOne = function() {

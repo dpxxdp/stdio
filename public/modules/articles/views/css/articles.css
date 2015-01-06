@@ -11,6 +11,25 @@ a:hover, a:visited, a:link, a:active {
   text-decoration: none;
 }
 
+/*colors for user setting choices*/
+
+.Red {
+  color: #cc3333;
+}
+.Orange{
+  color: #cc9933;
+}
+.Green{
+  color: #33b77b;
+}
+.Blue{
+  color: #337ab7;
+}
+.Purple{
+  color: #9a59b7;
+}
+
+
 .myButton {
 	-moz-box-shadow:inset 0px 1px 3px 0px #91b8b3;
 	-webkit-box-shadow:inset 0px 1px 3px 0px #91b8b3;
@@ -58,6 +77,17 @@ a:hover, a:visited, a:link, a:active {
   border-top:1px solid lightgrey;
 }
 
+.article-ui {
+  color:#aaa;
+  cursor:pointer;
+}
+
+.article-ui-clicked {
+  /*remove color here to apply user selected color*/
+  color:#555;
+  cursor:pointer;
+}
+
 .post-title {
   display:inline-block;
   font-size:20px;
@@ -71,7 +101,7 @@ a:hover, a:visited, a:link, a:active {
   padding: 0px 0px 5px 0px;
   margin: 0px 0px 0px 25px;
   width:75%;
-  color: #337ab7;
+  /*color: #337ab7;*/
   border:none;
   border-bottom: 1px solid #ccc;
   outline:none;
@@ -118,12 +148,12 @@ a:hover, a:visited, a:link, a:active {
 }
 
 .renderButton {
-  color: #aaa;
+  color: #ddd;
   top: 5px;
 }
 
 .renderButtonGlow {
-  color: #f44;
+  color: #555;
   top: 5px;
 }
 
