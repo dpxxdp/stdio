@@ -104,7 +104,7 @@ a:hover, a:visited, a:link, a:active {
   /*color: #337ab7;*/
   border:none;
   border-bottom: 1px solid #ccc;
-  outline:none;
+  /*outline:none;*/
 }
 .post-entry {
   display:inline-block;
@@ -115,7 +115,7 @@ a:hover, a:visited, a:link, a:active {
   color: #666;
   border:none;
   border-bottom: 1px solid #ccc;
-  outline:none;
+  /*outline:none;*/
 }
 
 .post-header {
@@ -135,6 +135,7 @@ a:hover, a:visited, a:link, a:active {
 }
 
 .post-preview {
+  font-size: 1em;
   /*border:2px solid purple;*/
 }
 
@@ -186,6 +187,7 @@ a:hover, a:visited, a:link, a:active {
   -webkit-transition: all linear 0.5s;
   transition: all linear 0.5s;
   -moz-transition: all linear 0.5s;
+  -o-transition: all linear 0.5s;
 }
 
 .animate-errorPopup.ng-hide{

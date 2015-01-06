@@ -128,14 +128,6 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
 	var sortBy = req.query.sortBy;
-/*
-	switch(req.sortBy){
-		case 'date' : sortBy = 'created'; break;
-		case 'kismet' : sortBy = 'kismet'; break;
-		default: sortBy = 'kismet';
-	}
-*/
-	console.log("sortBy test: " + sortBy)
 
 	Article.find({parent:'top'}).sort(sortBy).populate('user', 'username').exec(function(err, articles) {
 		if (err) {
@@ -143,8 +135,6 @@ exports.list = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			console.log("success test");
-			//console.log(articles);
 			res.json(articles);
 		}
 	});

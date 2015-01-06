@@ -252,21 +252,44 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 		};
 
-		$scope.sortBy = 'kismet';
+		$scope.sortBy = 'created';
 		$scope.sortDesc = true;
 		$scope.sortAndUpdate = function(sorter){
 			if(sorter==='reverse')
-				$scope.sortDesc = !$scope.sortDesc
+				$scope.sortDesc = !$scope.sortDesc;
 			else
 			{
 				$scope.sortBy = sorter;
 			}
 
 			$scope.find();
-		}
+		};
 
+		//$scope.now = Date.now();
+		//$scope.fuck = 'ug'; //$scope.articles[1].created;
+		//$scope.check = $scope.dateDiffInDays(now,$scope.articles[1].created);
+
+		$scope.dateDiffInDays = function (a, b) {
+			var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+			// Discard the time and time-zone information.
+			var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+			var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+			return (utc2 - utc1) / _MS_PER_DAY;
+			//return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+		};
+
+/*
+		$scope.sortArticles = function(){
+			articles.sort(function(a,b){
+				var ageA = Date.Now - a.created;
+				var ageB = Date.Now - b.created;
+
+				if(a.Created)
+			})
+		}
+*/
 		$scope.find = function() {
-	//		$scope.articles = Articles.query();
+			//$scope.articles = Articles.query();
 			$scope.articles = Articles.list({sortBy:($scope.sortDesc?'-':'') + $scope.sortBy});
 		};
 
