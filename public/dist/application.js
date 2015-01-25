@@ -103,6 +103,9 @@ angular.module('articles').config(['$stateProvider',
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', '$animate', '$timeout', 'Authentication', 'Articles', 'Comments',
 	function($scope, $stateParams, $location, $animate, $timeout, Authentication, Articles, Comments) {
 		$scope.authentication = Authentication;
+		$scope.userSelectedColor = 'Blue';
+		//if(authentication.user.color)
+		//	$scope.userSelectedColor = authentication.user.color;
 
 		var welcomeToTheSpot = [
 			'Welcome to the Spot',
@@ -115,21 +118,36 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			'For all your spot hitting needs',
 			'There once was a man from nantucket..',
 			'I spy',
-			'Somebody poisoned the water spot',
+			'Somebody poisoned the other spot',
 			'This is no child\'s spot',
-			'When one spot is worth twice the trouble'
+			'This spot is worth two in the bush',
+			'This is an open spot',
+			'Small spot: handle with care',
+			'The standard in out spot',
+			'Your text spot studio',
+			'A free spot',
 		];
-
 		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
 
 		$scope.switchShowFull = function(repeatScope){
 			repeatScope.showFull = !repeatScope.showFull;
 		};
 
+		$scope.colorsVisible = false;
+		$scope.switchColorsVisible = function(){
+			$scope.colorsVisible = !$scope.colorsVisible;
+		};
+
 		$scope.createVisible = false;
 		$scope.switchCreateVisible = function(){
 			$scope.createVisible = !$scope.createVisible;
 		};
+
+		$scope.simpleUI = false;
+		$scope.switchSimpleUI = function(){
+			$scope.simpleUI = !$scope.simpleUI;
+		};
+
 
 		$scope.create = function() {
 			var article = new Articles({
@@ -214,7 +232,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				//$location.path('articles/' + article._id);
 			}, function(errorResponse) {
 				article.kismet -= 1;
-				$scope.error = errorResponse.data.message;
+				articleScope.thisError = errorResponse.data.message;
 				articleScope.showError=true;
 				$timeout(function(){
 					articleScope.showError=false;
@@ -234,8 +252,45 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 		};
 
+		$scope.sortBy = 'created';
+		$scope.sortDesc = true;
+		$scope.sortAndUpdate = function(sorter){
+			if(sorter==='reverse')
+				$scope.sortDesc = !$scope.sortDesc;
+			else
+			{
+				$scope.sortBy = sorter;
+			}
+
+			$scope.find();
+		};
+
+		//$scope.now = Date.now();
+		//$scope.fuck = 'ug'; //$scope.articles[1].created;
+		//$scope.check = $scope.dateDiffInDays(now,$scope.articles[1].created);
+
+		$scope.dateDiffInDays = function (a, b) {
+			var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+			// Discard the time and time-zone information.
+			var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+			var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+			return (utc2 - utc1) / _MS_PER_DAY;
+			//return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+		};
+
+/*
+		$scope.sortArticles = function(){
+			articles.sort(function(a,b){
+				var ageA = Date.Now - a.created;
+				var ageB = Date.Now - b.created;
+
+				if(a.Created)
+			})
+		}
+*/
 		$scope.find = function() {
-			$scope.articles = Articles.query();
+			//$scope.articles = Articles.query();
+			$scope.articles = Articles.list({sortBy:($scope.sortDesc?'-':'') + $scope.sortBy});
 		};
 
 		$scope.findOne = function() {
@@ -273,6 +328,13 @@ angular.module('articles')
 					method:'send_kismet',
 					params:{amt:1},
 					id:Date.now,
+				}
+			},
+			list: {
+				method: 'GET',
+				isArray: true,
+				params: {
+					sortBy: '@sortBy' //$scope.sorter
 				}
 			}
 		});

@@ -25,7 +25,7 @@ exports.settle_kismet = function(req, res, next) {
 				next();
 			});
 		} else {
-			return res.status(400).send({ message: 'It seems like you signed up using your ' + user.provider + ' account' });
+			return res.status(400).send({ message: 'You have no kismet to give :(' });
 		}
 	});
 };

@@ -21,6 +21,13 @@ angular.module('articles')
 					params:{amt:1},
 					id:Date.now,
 				}
+			},
+			list: {
+				method: 'GET',
+				isArray: true,
+				params: {
+					sortBy: '@sortBy' //$scope.sorter
+				}
 			}
 		});
 	}

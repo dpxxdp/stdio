@@ -3,6 +3,9 @@
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', '$animate', '$timeout', 'Authentication', 'Articles', 'Comments',
 	function($scope, $stateParams, $location, $animate, $timeout, Authentication, Articles, Comments) {
 		$scope.authentication = Authentication;
+		$scope.userSelectedColor = 'Blue';
+		//if(authentication.user.color)
+		//	$scope.userSelectedColor = authentication.user.color;
 
 		var welcomeToTheSpot = [
 			'Welcome to the Spot',
@@ -32,17 +35,27 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			'A spot of ink brought the city to it\'s knees',
 			'There\'s an ink spot on everyone',
 		];
-
 		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
 
 		$scope.switchShowFull = function(repeatScope){
 			repeatScope.showFull = !repeatScope.showFull;
 		};
 
+		$scope.colorsVisible = false;
+		$scope.switchColorsVisible = function(){
+			$scope.colorsVisible = !$scope.colorsVisible;
+		};
+
 		$scope.createVisible = false;
 		$scope.switchCreateVisible = function(){
 			$scope.createVisible = !$scope.createVisible;
 		};
+
+		$scope.simpleUI = false;
+		$scope.switchSimpleUI = function(){
+			$scope.simpleUI = !$scope.simpleUI;
+		};
+
 
 		$scope.create = function() {
 			var article = new Articles({
@@ -127,7 +140,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				//$location.path('articles/' + article._id);
 			}, function(errorResponse) {
 				article.kismet -= 1;
-				$scope.error = errorResponse.data.message;
+				articleScope.thisError = errorResponse.data.message;
 				articleScope.showError=true;
 				$timeout(function(){
 					articleScope.showError=false;
@@ -147,8 +160,45 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			});
 		};
 
+		$scope.sortBy = 'created';
+		$scope.sortDesc = true;
+		$scope.sortAndUpdate = function(sorter){
+			if(sorter==='reverse')
+				$scope.sortDesc = !$scope.sortDesc;
+			else
+			{
+				$scope.sortBy = sorter;
+			}
+
+			$scope.find();
+		};
+
+		//$scope.now = Date.now();
+		//$scope.fuck = 'ug'; //$scope.articles[1].created;
+		//$scope.check = $scope.dateDiffInDays(now,$scope.articles[1].created);
+
+		$scope.dateDiffInDays = function (a, b) {
+			var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+			// Discard the time and time-zone information.
+			var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+			var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+			return (utc2 - utc1) / _MS_PER_DAY;
+			//return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+		};
+
+/*
+		$scope.sortArticles = function(){
+			articles.sort(function(a,b){
+				var ageA = Date.Now - a.created;
+				var ageB = Date.Now - b.created;
+
+				if(a.Created)
+			})
+		}
+*/
 		$scope.find = function() {
-			$scope.articles = Articles.query();
+			//$scope.articles = Articles.query();
+			$scope.articles = Articles.list({sortBy:($scope.sortDesc?'-':'') + $scope.sortBy});
 		};
 
 		$scope.findOne = function() {

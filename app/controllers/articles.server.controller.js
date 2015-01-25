@@ -87,7 +87,7 @@ exports.kismet = function(req, res) {
 	//	} else {
 	//		console.log('articles.server.controller.kismet: article: ' + JSON.stringify(article));
 	//		//article = _.extend(article, req.body);
-	//		
+	//
 	//		console.log('articles.server.controller.kismet: updating kismet' + article.kismet);
 	//		article.save(function(err) {
 	//			if (err) {
@@ -127,7 +127,9 @@ exports.delete = function(req, res) {
  * List of Articles
  */
 exports.list = function(req, res) {
-	Article.find({parent:'top'}).sort('-created').populate('user', 'username').exec(function(err, articles) {
+	var sortBy = req.query.sortBy;
+
+	Article.find({parent:'top'}).sort(sortBy).populate('user', 'username').exec(function(err, articles) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
