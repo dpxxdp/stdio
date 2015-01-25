@@ -1,0 +1,37 @@
+<section data-ng-controller="ProposalsController" data-ng-init="find()">
+  <div class="page-header">
+    <h1>Create New Proposal</h1>
+  </div>
+  <form role="form" ng-submit="create()">
+    <div class="form-group">
+      <label for="proposalQuestion">Question</label>
+      <input type="text" ng-model="proposal.question" class="form-control" id="proposalQuestion" placeholder="Enter proposal question">
+    </div>
+    <div class="form-group">
+      <label>Choices</label>
+      <div ng-repeat="choice in proposal.choices">
+        <input type="text" ng-model="choice.text" class="form-control" placeholder="Enter choice {{$index+1}} text"><br>
+      </div>
+    </div>    
+    <div class="row">
+      <div class="col-xs-12">
+        <button type="button" class="btn btn-default" ng-click="addChoice()"><span class="glyphicon glyphicon-plus">
+        </span> Add another</button>
+      </div>
+    </div>
+    <p><hr></p>
+    <div class="row">
+      <div class="col-xs-6">
+        <a href="#/proposals" class="btn btn-default" role="button">
+          <span class="glyphicon glyphicon-arrow-left"></span>
+          Back to Proposal List
+        </a>
+      </div>
+      <div class="col-xs-6">
+        <button class="btn btn-primary pull-right" type="submit">
+          Create Proposal &raquo;</button>
+      </div>
+    </div>
+    <p>&nbsp;</p>
+  </form>
+</section>

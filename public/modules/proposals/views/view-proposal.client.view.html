@@ -1,0 +1,48 @@
+<section data-ng-controller="ProposalsController" data-ng-init="find()">
+  <div class="well well-lg">
+    <strong>Question</strong><br>{{proposal.question}}
+  </div>
+  <div ng-hide="proposal.userVoted">
+    <p class="lead">Please select one of the following options.</p>
+    <form role="form" ng-submit="vote()">
+      <div ng-repeat="choice in proposal.choices" class="radio">
+        <label>
+          <input type="radio" name="choice" ng-model="proposal.userVote" value="{{choice._id}}">
+          {{choice.text}}
+        </label>
+      </div>
+      <p><hr></p>
+      <div class="row">
+        <div class="col-xs-6">
+          <a href="/!#/proposals" class="btn btn-default" role="button"><span class="glyphicon glyphicoleft"></span>Back to Proposal
+        </div>
+        <div class="col-xs-6">
+          <button class="btn btn-primary pull-right" type="submit"> Vote &raquo;</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div ng-show="proposal.userVoted">
+    <table class="result-table">
+      <tbody>
+        <tr ng-repeat="choice in proposal.choices">
+          <td>{{choice.text}}</td>
+          <td>
+            <table style="width: {{choice.votes.length/proposal.totalVotes*100}}%;">
+              <tr><td>{{choice.votes.length}}</td></tr>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>  
+    <p><em>{{proposal.totalVotes}} votes counted so far. <span ng-show="proposal.userChoice">You votetrong>{{<proposal class=" "></proposal>userChoice.text}} 
+    </strong>.</span></em></p>
+    <p><hr></p>
+    <p>
+      <a href="/!#/proposals" class="btn btn-default" role="button">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Back to Proposal List
+      </a>
+    </p>
+  </div>
+</section>

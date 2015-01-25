@@ -1,39 +1,66 @@
 'use strict';
 
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', '$animate', '$timeout', 'Authentication', 'Articles', 'Comments',
-	function($scope, $stateParams, $location, $animate, $timeout, Authentication, Articles, Comments) {
+angular.module('proposals').controller('ProposalsController', ['$scope', '$stateParams', '$location', '$animate', '$timeout', 'Authentication', 'Proposals', 'Comments',
+	function($scope, $stateParams, $location, $animate, $timeout, Authentication, Proposals, Comments) {
 		$scope.authentication = Authentication;
 
-		var welcomeToTheSpot = [
-			'Welcome to the Spot',
-			'Your spot is now hit',
-			'Cigarette spot, smoke em if you got em',
-			'You are now a spot',
-			'See spot play bongos',
-			'There is no smoking in the spot',
-			'Spotted leopards everywhere',
-			'For all your spot hitting needs',
-			'There once was a man from nantucket...',
-			'I spot',
-			'Somebody poisoned the other spot',
-			'Not a child\'s spot',
-			'This spot is worth two in the bush',
-			'Open spot',
-			'Small spot: handle with care',
-			'The standard in out spot',
-			'Your text spot studio',
-			'A free spot',
-			'That spot language',
-			'A blue tent with spots',
-			'This is the spot where Study-0',
-			'You pub spot',
-			'Publication spot',
-			'Spot inc.',
-			'A spot of ink brought the city to it\'s knees',
-			'There\'s an ink spot on everyone',
-		];
+		// Managing the proposal list
+		$scope.find = function($scope) {
+			$scope.proposals = Proposals.query();
+		};
 
-		$scope.WelcomeToTheSpot = welcomeToTheSpot[Math.floor(Math.random()*welcomeToTheSpot.length)];
+		// Voting / viewing proposal results
+		$scope.findOne = function($scope, $routeParams) {
+
+			$scope.proposal = Proposals.get({
+				proposalId: $stateParams.proposalId
+			});
+			$scope.vote = function() {};
+		};
+
+		$scope.proposal = {
+			question: '',
+			choices: [ { text: '' }, { text: '' }, { text: '' }]
+		};
+
+		$scope.addChoice = function() {
+			$scope.proposal.choices.push({ text: '' });
+		};
+
+		$scope.create = function() {
+			var proposal = $scope.proposal;
+			if(proposal.question.length > 0) {
+				var choiceCount = 0;
+				for(var i = 0; i < proposal.choices.length; i++) {
+					var choice = proposal.choices[i];
+					if(choice.text.length > 0) {
+						choiceCount++;
+					}
+				}
+				if(choiceCount > 1) {
+					var newProposal = new Proposals(proposal);
+					newProposal.$save(function(p, resp) {
+						if(!p.error) {
+							$location.path('proposals');
+						} else {
+							alert('Could not create proposal');
+						}
+					});
+				} else {
+					alert('You must enter at least two choices');
+				}
+			} else {
+				alert('You must enter a question');
+			}
+		};
+
+		$scope.createVisible = false;
+		$scope.switchCreateVisible = function(){
+			$scope.createVisible = !$scope.createVisible;
+		};
+
+
+/*
 
 		$scope.switchShowFull = function(repeatScope){
 			repeatScope.showFull = !repeatScope.showFull;
@@ -42,27 +69,6 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 		$scope.createVisible = false;
 		$scope.switchCreateVisible = function(){
 			$scope.createVisible = !$scope.createVisible;
-		};
-
-		$scope.create = function() {
-			var article = new Articles({
-				title: this.title,
-				content: this.content
-			});
-
-			article.parent = 'top'; //by default the articles list only shows where parent = 'top'
-			article.user = this.user;
-
-			article.$save(function(response) {
-				//$location.path('articles/' + response._id);
-
-				$scope.title = '';
-				$scope.content = '';
-				$scope.articles.unshift(article); //push it to the display
-				$scope.createVisible = !$scope.createVisible;
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
 		};
 
 		$scope.createComment = function(parentId) {
@@ -160,6 +166,8 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				parentId: $stateParams.articleId
 			});
 		};
+
+*/
 
 	}
 ]);

@@ -1,0 +1,70 @@
+<section data-ng-controller="ProposalsController" data-ng-init="find()">
+
+<div class="container" style="padding:5px" ng-class="{'dev-mode':devMode}">
+
+  <!-- <button class="myButton" type="button">New Post</button> -->
+  <a style="cursor:pointer" ng-click="switchCreateVisible()">
+    <i style="color:#999" class="glyphicon glyphicon-plus"></i>
+  </a><-propose something
+
+  <span ng-show="false"> | <input type="checkbox" ng-model="devMode">dev mode </span>
+
+  <div ng-show="createVisible" class="proposal-container" >
+    <form name="proposalForm" data-ng-submit="create()" novalidate>
+      <div class="form-group">
+        <label for="proposalQuestion">Question</label>
+        <input type="text" ng-model="proposal.question" class="form-control" id="proposalQuestion" placeholder="Enter proposal question">
+      </div>
+      <div class="form-group">
+        <label>Choices</label>
+        <div ng-repeat="choice in proposal.choices">
+          <input type="text" ng-model="choice.text" class="form-control" placeholder="Enter choice {{$index+1}} text"><br>
+        </div>
+      </div>    
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="button" class="btn btn-default" ng-click="addChoice()"><span class="glyphicon glyphicon-plus">
+          </span>Add Choice</button>
+        </div>
+      </div>
+      <p><hr></p>
+      <div class="row">
+        <div class="col-xs-6">
+          <a href="#!/proposals" class="btn btn-default" role="button">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Back to Proposal List
+          </a>
+        </div>
+        <div class="col-xs-6">
+          <button class="btn btn-primary pull-right" type="submit">
+            Create Proposal &raquo;</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+  <div class="row">
+    <div class="col-xs-7">
+      <input type="text" class="form-control" ng-model="query" placeholder="Search for a proposal">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <hr>
+    </div>
+  </div>
+  <div class="row" ng-switch on="proposals.length">
+    <ul ng-switch-default>
+      <li ng-repeat="proposal in proposals | filter:query">
+        <a href="#!/proposal/{{proposal._id}}">{{proposal.question}}</a>
+      </li>
+    </ul>
+  </div>
+  <p>&nbsp;</p>
+</section>
+
+
+
+

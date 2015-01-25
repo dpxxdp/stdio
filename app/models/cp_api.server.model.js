@@ -182,10 +182,10 @@ exports.https_client = function(body, callback) {
 	});
 
 	var bodyAsString = JSON.stringify(body);
-	console.log("cp trying to send request");
+	console.log('cp trying to send request');
 
 	secureRequest.on('error', function(error){
-		console.log("caught an error");
+		console.log('caught an error');
 		callback(error);
 	});
 
